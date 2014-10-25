@@ -3,6 +3,10 @@ var express = require('express'),
 
 app.use(express.static('www'));
 
+livereload = require('livereload');
+server = livereload.createServer();
+server.watch(__dirname + "/www");
+
 // CORS (Cross-Origin Resource Sharing) headers to support Cross-site HTTP requests
 app.all('*', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
