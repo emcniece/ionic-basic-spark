@@ -1,7 +1,7 @@
 {
-  "name": "Ionic Starter",
-  "description": "A simple Ionic app for Heroku",
-  "repository": "https://github.com/driftyco/ionic-heroku-button",
+  "name": "Ionic Basic Spark",
+  "description": "A simple Ionic app for Spark Core",
+  "repository": "https://github.com/emcniece/ionic-basic-spark",
   "logo": "http://ionicframework.com/img/ionic-logo-blog.png",
-  "keywords": ["ionic", "static"]
+  "keywords": ["ionic", "static", "basic", "spark", "core"]
 }
