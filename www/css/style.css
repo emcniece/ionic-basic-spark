@@ -1,1 +1,8 @@
 /* Empty. Add your own CSS if you like */
+.align-center{ text-align: center; }
+.align-left{ text-align: left; }
+.align-right{ text-align: right; }
+
+.icon-huge{
+	font-size:40px;
+}
