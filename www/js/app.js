@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
+angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.services'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -74,9 +74,9 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     .state('tab.accounts', {
       url: '/accounts',
       views: {
-        'tab-accounts': {
+        'tab-dash': {
           templateUrl: 'templates/tab-accounts.html',
-          controller: 'AccountCtrl'
+          //controller: 'AccountCtrl'
         }
       }
     })
@@ -84,9 +84,9 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     .state('tab.cores', {
       url: '/cores',
       views: {
-        'tab-cores': {
+        'tab-dash': {
           templateUrl: 'templates/tab-cores.html',
-          controller: 'CoresCtrl'
+          //controller: 'CoresCtrl'
         }
       }
     })
@@ -94,9 +94,9 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     .state('tab.data', {
       url: '/data',
       views: {
-        'tab-data': {
+        'tab-dash': {
           templateUrl: 'templates/tab-data.html',
-          controller: 'DataCtrl'
+          //controller: 'DataCtrl'
         }
       }
     })
@@ -104,9 +104,9 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     .state('tab.settings', {
       url: '/settings',
       views: {
-        'tab-settings': {
+        'tab-dash': {
           templateUrl: 'templates/tab-settings.html',
-          controller: 'SettingsCtrl'
+          //controller: 'SettingsCtrl'
         }
       }
     })
