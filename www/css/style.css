@@ -9,3 +9,11 @@
 a{
 	color:#00adef;
 }
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
+	font-family:"Gotham A","Gotham B",proxima-nova,"Helvetica Neue",helvetica,arial,sans-serif;
+	font-weight: 100;
+}
+#home h4, #home h5, #home h6, #home p, #home span, #home a, #home ul, #home li, #home button, #home input{
+	font-family: "Gotham SSm A","Gotham SSm B",proxima-nova,"Helvetica Neue",helvetica,arial,sans-serif;
+	font-weight: 300;
+}

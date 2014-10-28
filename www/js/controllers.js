@@ -12,4 +12,15 @@ angular.module('starter.controllers', [])
 })
 
 .controller('AccountCtrl', function($scope) {
-});
+})
+
+.controller('CoresCtrl', function($scope) {
+})
+
+.controller('DataCtrl', function($scope) {
+})
+
+.controller('SettingsCtrl', function($scope) {
+})
+
+; // angular.module starter.controllers
