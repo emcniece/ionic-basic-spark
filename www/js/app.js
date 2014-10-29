@@ -74,7 +74,7 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
     .state('tab.accounts', {
       url: '/accounts',
       views: {
-        'tab-dash': {
+        'tab-accounts': {
           templateUrl: 'templates/tab-accounts.html',
           //controller: 'AccountCtrl'
         }
@@ -84,7 +84,7 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
     .state('tab.cores', {
       url: '/cores',
       views: {
-        'tab-dash': {
+        'tab-cores': {
           templateUrl: 'templates/tab-cores.html',
           //controller: 'CoresCtrl'
         }
@@ -94,7 +94,7 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
     .state('tab.data', {
       url: '/data',
       views: {
-        'tab-dash': {
+        'tab-data': {
           templateUrl: 'templates/tab-data.html',
           //controller: 'DataCtrl'
         }
@@ -104,7 +104,7 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
     .state('tab.settings', {
       url: '/settings',
       views: {
-        'tab-dash': {
+        'tab-settings': {
           templateUrl: 'templates/tab-settings.html',
           //controller: 'SettingsCtrl'
         }
