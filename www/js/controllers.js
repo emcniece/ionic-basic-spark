@@ -47,8 +47,18 @@ angular.module('starter.controllers', [])
 .controller('DataCtrl', function($scope) {
 })
 
-.controller('SettingsCtrl', function($scope) {
-})
+// http://codepen.io/FrancoAA/pen/oufzD/
+.controller('SettingsCtrl', [
+	'$localStorage',
+	'$scope',
+	function($localStorage, $scope) {
+
+		$localstorage.testvar = "testing 123";
+
+		console.log( $localStorage);
+
+	}
+]);
 
 
 

@@ -1,5 +1,28 @@
 // Ionic Starter App
 
+// Angular JS localstorage - NPM independent
+// http://learn.ionicframework.com/formulas/localstorage/
+
+angular.module('ionic.utils', [])
+
+.factory('$ionicPlatform', ['$window', function($window) {
+  return {
+    set: function(key, value) {
+      $window.localStorage[key] = value;
+    },
+    get: function(key, defaultValue) {
+      return $window.localStorage[key] || defaultValue;
+    },
+    setObject: function(key, value) {
+      $window.localStorage[key] = JSON.stringify(value);
+    },
+    getObject: function(key) {
+      return JSON.parse($window.localStorage[key] || '{}');
+    }
+  }
+}]);
+
+
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
@@ -19,6 +42,7 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
       StatusBar.styleDefault();
     }
   });
+
 })
 
 .config(function($stateProvider, $urlRouterProvider) {
@@ -117,4 +141,5 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
   $urlRouterProvider.otherwise('/tab/dash');
 
 });
+
 
