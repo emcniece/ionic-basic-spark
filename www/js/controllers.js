@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', ['ngStorage'])
 
 .controller('DashCtrl', function($scope) {
 })
@@ -53,7 +53,7 @@ angular.module('starter.controllers', [])
 	'$scope',
 	function($localStorage, $scope) {
 
-		$localstorage.testvar = "testing 123";
+		$localStorage.testvar = "testing 123";
 
 		console.log( $localStorage);
 

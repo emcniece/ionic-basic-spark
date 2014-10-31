@@ -130,7 +130,7 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
       views: {
         'tab-settings': {
           templateUrl: 'templates/tab-settings.html',
-          //controller: 'SettingsCtrl'
+          controller: 'SettingsCtrl'
         }
       }
     })
