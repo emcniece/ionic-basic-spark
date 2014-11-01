@@ -66,7 +66,7 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
       url: '/dash',
       views: {
         'tab-dash': {
-          templateUrl: 'templates/tab-dash.html',
+          templateUrl: 'templates/tabs/tab-dash.html',
           controller: 'DashCtrl'
         }
       }
@@ -77,7 +77,7 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
       url: '/friends',
       views: {
         'tab-friends': {
-          templateUrl: 'templates/tab-friends.html',
+          templateUrl: 'templates/tabs/tab-friends.html',
           controller: 'FriendsCtrl'
         }
       }
@@ -99,7 +99,7 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
       url: '/accounts',
       views: {
         'tab-accounts': {
-          templateUrl: 'templates/tab-accounts.html',
+          templateUrl: 'templates/tabs/tab-accounts.html',
           //controller: 'AccountCtrl'
         }
       }
@@ -109,7 +109,7 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
       url: '/cores',
       views: {
         'tab-cores': {
-          templateUrl: 'templates/tab-cores.html',
+          templateUrl: 'templates/tabs/tab-cores.html',
           controller: 'CoresCtrl'
         }
       }
@@ -119,7 +119,7 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
       url: '/data',
       views: {
         'tab-data': {
-          templateUrl: 'templates/tab-data.html',
+          templateUrl: 'templates/tabs/tab-data.html',
           //controller: 'DataCtrl'
         }
       }
@@ -129,7 +129,7 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
       url: '/settings',
       views: {
         'tab-settings': {
-          templateUrl: 'templates/tab-settings.html',
+          templateUrl: 'templates/tabs/tab-settings.html',
           controller: 'SettingsCtrl'
         }
       }
