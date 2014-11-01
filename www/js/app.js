@@ -110,7 +110,7 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
       views: {
         'tab-cores': {
           templateUrl: 'templates/tab-cores.html',
-          //controller: 'CoresCtrl'
+          controller: 'CoresCtrl'
         }
       }
     })

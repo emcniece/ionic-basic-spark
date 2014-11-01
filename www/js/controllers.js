@@ -1,7 +1,14 @@
 angular.module('starter.controllers', ['ngStorage'])
 
-.controller('DashCtrl', function($scope) {
-})
+.controller('DashCtrl', ['$localStorage', '$scope',
+	function($localStorage, $scope) {
+
+		$localStorage.cores = 1;
+
+		console.log( $localStorage);
+
+	}
+])
 
 .controller('FriendsCtrl', function($scope, Friends) {
   $scope.friends = Friends.all();
@@ -41,24 +48,37 @@ angular.module('starter.controllers', ['ngStorage'])
 =            Cores Tab            =
 =================================*/
 
-.controller('CoresCtrl', function($scope) {
-})
+.controller('CoresCtrl', [ '$localStorage', '$scope',
+	function($localStorage, $scope) {
+
+		$localStorage.cores++;
+
+		console.log( $localStorage);
+
+	}
+])
 
 .controller('DataCtrl', function($scope) {
 })
 
 // http://codepen.io/FrancoAA/pen/oufzD/
-.controller('SettingsCtrl', [
-	'$localStorage',
-	'$scope',
+.controller('SettingsCtrl', [ '$localStorage', '$scope',
 	function($localStorage, $scope) {
 
 		$localStorage.testvar = "testing 123";
 
 		console.log( $localStorage);
 
+
+		$scope.clearAllData = function(){
+			if( confirm('Cannot undo - clear all app localstorage data?')){
+				window.localStorage.clear();
+				console.log('cleared', $localStorage);
+			}
+		}
+
 	}
-]);
+])
 
 
 
