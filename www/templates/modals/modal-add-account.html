@@ -1,10 +1,36 @@
   <ion-modal-view>
-    <ion-header-bar>
+    <ion-header-bar class="bar-royal">
       <h1 class="title">Add New Account</h1>
       <button class="button icon ion-ios7-close-outline button-clear" ng-click="modal.hide()"></button>
     </ion-header-bar>
     <ion-content>
-      Hello!
+
+      <form name="create-account" ng-controller="CreateAcctCtrl">
+	      <div class="list">
+    			<label class="item item-input item-stacked-label">
+    			  <span class="input-label">Email</span>
+    			  <input name="email" type="text" ng-model="user.email" placeholder="john@doe.com" ng-value="email">
+    			</label>
+    			<label class="item item-input item-stacked-label">
+    			  <span class="input-label">Password</span>
+    			  <input name="pass" type="password" ng-model="user.pass" placeholder="[topsecret]" ng-value="pass">
+    			</label>
+
+  		  </div>
+
+		    <div class="padding">
+	        <button class="button button-block button-royal" ng-click="checkAcct('{{email}}', '{{pass}}')">Check Account</button>
+	      </div>
+
+        <div class="padding">
+          <button class="button button-block button-balanced" ng-click="createAcct()">Create Account</button>
+        </div>
+
+
+	  </form>
+
+<p class="padding align-center">Your account password is not stored in plain text - it is encoded and saved via localStorage for later use.</p>
+
     </ion-content>
   </ion-modal-view>
 

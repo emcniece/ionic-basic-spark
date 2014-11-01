@@ -1,5 +1,6 @@
 var express = require('express')
     , app = express()
+    , spark = require('sparkcloud')
     ;
 
 app.use(express.static('www'));

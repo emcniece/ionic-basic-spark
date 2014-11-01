@@ -32,8 +32,23 @@ angular.module('starter.controllers', ['ngStorage'])
 	    $scope.modal = modal;
 	  });
 
-
 })
+
+// In modal
+.controller('CreateAcctCtrl', function($localStorage, $scope, $ionicModal, $ionicLoading) {
+	console.log('CreateAcctCtrl', $scope.email);
+
+	$scope.names = ['pizza', 'unicorns', 'robots'];
+	$scope.my = {favorite: 'unicorns'}
+
+	$scope.checkAcct = function(user, pass){
+		console.log('checkAcct', $scope.user);
+		$ionicLoading.show({ template: "Testing credentials..."});
+
+		setTimeout(function(){ $ionicLoading.hide() }, 2000);
+	}
+})
+
 
 
 /*=================================
