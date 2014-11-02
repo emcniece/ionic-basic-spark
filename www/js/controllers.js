@@ -71,16 +71,6 @@ angular.module('starter.controllers', ['ngStorage'])
             $scope.user.valid=1;
         });
 
-
-        /*
-		setTimeout(function(){
-			// Perform validation in here. faking out for now
-			$scope.user.valid=1;
-			$ionicLoading.hide();
-
-		}, 2000);
-		*/
-
 	} // scope.checkAcct
 })
 
