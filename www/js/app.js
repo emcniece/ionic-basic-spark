@@ -14,7 +14,7 @@ angular.module('ionic.utils', [])
 // 'starter.controllers' is found in controllers.js
 angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.services'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $localStorage) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -25,6 +25,30 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+
+    // Load default settings and variables
+    
+    angular.extend($localStorage, {
+      accounts: [],
+      cores: {},
+      sparkData: {},
+      settings: {
+        sparkApiUrl: "https://api.spark.io/v1/"
+      }
+    });
+    
+    /*
+    angular.extend({
+      accounts: [],
+      cores: {},
+      sparkData: {},
+      settings: {
+        sparkApiUrl: "https://api.spark.io/v1/"
+      }
+    }, $localStorage);
+    */
+
+    console.log( 'Loaded storage: ', $localStorage);
   });
 
 })

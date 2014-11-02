@@ -34,14 +34,16 @@ angular.module('starter.controllers', ['ngStorage'])
 
 })
 
-// In modal
-.controller('CreateAcctCtrl', function($localStorage, $scope, $ionicModal, $ionicLoading, $http) {
+/**
+ * Modal Popup box and a few button functions
+ */
+.controller('CreateAcctCtrl', function($localStorage, $scope, $ionicModal, $ionicLoading, $http, Accounts) {
 
 	// Defaults
-	$scope.user = {email: "", pass: "", valid: 0, checkok: {ok: false, errormsg:""} }
+	$scope.user = {email: "", pass: "", auth: "", valid: 0, checkok: {ok: false, errormsg:""}, token: {} }
 
+	// Checks API for account validity, returns tokens and sets latest active
 	$scope.checkAcct = function(){
-		//console.log('checkAcct', $scope.user);
 
 		if( ($scope.user.email === "") || ($scope.user.pass === "") ){
 			$scope.user.checkok.okmsg = false;
@@ -68,10 +70,36 @@ angular.module('starter.controllers', ['ngStorage'])
 
             $ionicLoading.hide();
             $scope.user.checkok.okmsg = data.ok;
+            $scope.user.auth = userEncoded;
             $scope.user.valid=1;
+
+            // set most recent token
+            var latestTime = Date.parse(Date());
+            angular.forEach(data, function(value, key){
+            	var tempDate = Date.parse(value.expires_at);
+            	if( tempDate > latestTime) $scope.user.token = value.token;
+            });
+
         });
 
 	} // scope.checkAcct
+
+	// Adds acct from $scope.checkAcct to $localStorage for later use
+	$scope.createAcct = function(){
+
+		if( JSON.stringify($localStorage.accounts).indexOf($scope.user.email) === -1){
+			// Clean unwanted data
+		    var newAcct = {
+		    	email: $scope.user.email,
+		    	auth: $scope.user.auth,
+		    	token: $scope.user.token
+		    }
+	    	Accounts.addAccount(newAcct);
+	    	$scope.modal.hide()
+		} else{
+		  alert('Account '+$scope.user.email+' exists!');
+		}
+	}
 })
 
 
@@ -97,9 +125,6 @@ angular.module('starter.controllers', ['ngStorage'])
 .controller('SettingsCtrl', function($localStorage, $scope, $ionicModal) {
 
 	$localStorage.testvar = "testing 123";
-
-	console.log( $localStorage);
-
 
 	$scope.clearAllData = function(){
 		if( confirm('Cannot undo - clear all app localstorage data?')){
