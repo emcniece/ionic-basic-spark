@@ -2,6 +2,14 @@
   <ion-content class="padding">
     <h1>Settings</h1>
 
+	<div class="list">
+		<label class="item item-input item-stacked-label">
+			<span class="input-label">Main API URL</span>
+			<input name="sparkApiUrl" type="text" ng-model="settings.sparkApiUrl" placeholder="https://api.spark.io/v1" ng-value="sparkApiUrl" value="https://api.spark.io/v1/">
+		</label>
+
+	</div>
+
 	<div class="paddings">
       <button class="button button-block button-assertive" ng-click="clearAllData()">Clear All Data</button>
     </div>

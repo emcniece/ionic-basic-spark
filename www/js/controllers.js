@@ -35,18 +35,53 @@ angular.module('starter.controllers', ['ngStorage'])
 })
 
 // In modal
-.controller('CreateAcctCtrl', function($localStorage, $scope, $ionicModal, $ionicLoading) {
-	console.log('CreateAcctCtrl', $scope.email);
+.controller('CreateAcctCtrl', function($localStorage, $scope, $ionicModal, $ionicLoading, $http) {
 
-	$scope.names = ['pizza', 'unicorns', 'robots'];
-	$scope.my = {favorite: 'unicorns'}
+	// Defaults
+	$scope.user = {email: "", pass: "", valid: 0, checkok: {ok: false, errormsg:""} }
 
-	$scope.checkAcct = function(user, pass){
-		console.log('checkAcct', $scope.user);
-		$ionicLoading.show({ template: "Testing credentials..."});
+	$scope.checkAcct = function(){
+		//console.log('checkAcct', $scope.user);
 
-		setTimeout(function(){ $ionicLoading.hide() }, 2000);
-	}
+		if( ($scope.user.email === "") || ($scope.user.pass === "") ){
+			$scope.user.checkok.okmsg = false;
+			$scope.user.checkok.errormsg = "empty fields.";
+			return false;
+		}
+
+		$ionicLoading.show({ template: "Testing credentials... <i class='icon ion-loading-c'></i>"});
+
+		var userEncoded = Base64.encode($scope.user.email+':'+$scope.user.pass);
+
+    	$http.defaults.headers.common['Authorization'] = 'Basic ' + userEncoded;
+		$http({
+			method: 'GET',
+			url: "https://api.spark.io/v1/access_tokens"
+		})
+        .error(function(data, status, headers, config) {
+
+            $ionicLoading.hide();
+            $scope.user.checkok.okmsg = data.ok;
+            $scope.user.checkok.errormsg = data.errors[0];
+        })
+        .success(function(data, status, headers, config) {
+
+            $ionicLoading.hide();
+            $scope.user.checkok.okmsg = data.ok;
+            $scope.user.valid=1;
+        });
+
+
+        /*
+		setTimeout(function(){
+			// Perform validation in here. faking out for now
+			$scope.user.valid=1;
+			$ionicLoading.hide();
+
+		}, 2000);
+		*/
+
+	} // scope.checkAcct
 })
 
 
