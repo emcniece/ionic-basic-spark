@@ -1,12 +1,37 @@
-  <ion-modal-view>
-    <ion-header-bar>
-      <h1 class="title">Add New Core</h1>
-      <button class="button icon ion-ios7-close-outline button-clear" ng-click="modal.hide()"></button>
-    </ion-header-bar>
-    <ion-content>
-      Hello!
-    </ion-content>
-  </ion-modal-view>
+<ion-modal-view>
+  <ion-header-bar class="bar-royal">
+    <h1 class="title">Add New Core</h1>
+    <button class="button icon ion-ios7-close-outline button-clear" ng-click="modal.hide()"></button>
+  </ion-header-bar>
+  <ion-content>
+
+    <form name="create-account" ng-controller="AddCoreCtrl">
+      <div class="list">
+
+	      <label class="item item-input item-select">
+  		    <div class="input-label">Select Account:</div>
+  		    <select ng-change="change()" ng-model="account.id">
+  		      <option value="" disabled selected>Account</option>
+            <option ng-repeat="account in accounts" value="{{account.id}}">{{account.email}}</option>
+  		    </select>
+  		  </label>
+
+        <button class="item button button-block button-assertive button-clear ng-hide" ng-show="errorMsg">Error: {{errorMsg}}</button>
+
+        <li class="item item-checkbox" ng-model="cores" ng-repeat="core in cores">
+          <label class="checkbox">
+            <input type="checkbox" value="{{core.id}}">
+          </label>
+          {{core.name}}
+        </li>
+
+        <button class="item button button-block button-balanced ng-hide" ng-show="cores">Add selectded cores</button>
+
+      </div>
+    </form>
+
+  </ion-content>
+</ion-modal-view>
 
 
 

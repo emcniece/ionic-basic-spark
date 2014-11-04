@@ -6,41 +6,44 @@ angular.module('starter.services', [])
 .service('SparkAPI', function($localStorage, $http, $q, $ionicLoading){
   return {
     fetch: fetch
-  }
+  };
 
-  function fetch(path, account, template){
+  function fetch(path, account, params, template){
 
-      if( typeof(account) !== 'undefined'){
-        var userEncoded = Base64.encode(account.email+':'+account.pass);
-        $http.defaults.headers.common['Authorization'] = 'Basic ' + userEncoded;
-      }
+    if( typeof(account) !== 'undefined' && (account) ){
+      var userEncoded = Base64.encode(account.email+':'+account.pass);
+      $http.defaults.headers.common['Authorization'] = 'Basic ' + userEncoded;
+    }
 
-      if( typeof(template) === 'undefined') template = "Requesting... ";
+    if( typeof(template) === 'undefined') template = "Requesting... ";
 
-      $ionicLoading.show({ template: template + "<i class='icon ion-loading-c'></i>"});
+    $ionicLoading.show({ template: template + "<i class='icon ion-loading-c'></i>"});
 
-      var request = $http({
-        method: 'GET',
-        url: $localStorage.settings.sparkApiUrl + path
-      });
+    console.log( 'params: ', params);
 
-      return( request.then(handleSuccess, handleError));
+    var request = $http({
+      method: 'GET',
+      params: params,
+      url: $localStorage.settings.sparkApiUrl + path
+    });
 
-    }; // fetch
+    return( request.then(handleSuccess, handleError));
+
+  } // fetch
 
   function handleSuccess(response, status){
     $ionicLoading.hide();
     return response.data;
   }
   function handleError(response){
-
+    console.log('AJAX error: ', response);
     $ionicLoading.hide();
     if (! angular.isObject( response.data ) || !response.statusText) {
       return( $q.reject( "An unknown error occurred." ) );
     }
 
     // Otherwise, use expected error message.
-    return( $q.reject( response.statusText ) );
+    return( $q.reject( response.data.error_description || response.statusText ) );
   }
 
 
@@ -79,37 +82,43 @@ angular.module('starter.services', [])
       delete $localStorage.accounts[accountId];
     },
     getLastActiveIndex: function() {
-      return parseInt(window.localStorage['lastActiveProject']) || 0;
+      return parseInt(window.localStorage['lastActiveProject'], 10) || 0;
     },
     setLastActiveIndex: function(index) {
       window.localStorage['lastActiveProject'] = index;
     }
-  }
+  };
 })
 
-/**
- * A simple example service that returns some data.
- */
-.factory('Friends', function() {
-  // Might use a resource here that returns a JSON array
+/*=====================================
+=            Cores Service            =
+=====================================*/
 
-  // Some fake testing data
-  var friends = [
-    { id: 0, name: 'Scruff McGruff' },
-    { id: 1, name: 'G.I. Joe' },
-    { id: 2, name: 'Miss Frizzle' },
-    { id: 3, name: 'Ash Ketchum' }
-  ];
-
+.factory('Cores', function($localStorage) {
   return {
     all: function() {
-      return friends;
+      return $localStorage.cores;
     },
-    get: function(friendId) {
-      // Simple index lookup
-      return friends[friendId];
+    add: function(core) {
+      $localStorage.cores[core.id] = core;
+      return account;
+    },
+    get: function(coreId){
+      return $localStorage.cores[coreId];
+    },
+    update: function(core){
+      $localStorage.accounts[core.id] = core;
+    },
+    delete: function(coreId){
+      delete $localStorage.core[coreId];
+    },
+    getLastActiveIndex: function() {
+      return parseInt(window.localStorage['lastActiveProject'], 10) || 0;
+    },
+    setLastActiveIndex: function(index) {
+      window.localStorage['lastActiveProject'] = index;
     }
-  }
+  };
 })
 
 ;
