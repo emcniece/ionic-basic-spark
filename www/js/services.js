@@ -8,25 +8,26 @@ angular.module('starter.services', [])
     fetch: fetch
   }
 
-  function fetch(path, account, template){
+  function fetch(path, account, data, template){
 
-      if( typeof(account) !== 'undefined'){
-        var userEncoded = Base64.encode(account.email+':'+account.pass);
-        $http.defaults.headers.common['Authorization'] = 'Basic ' + userEncoded;
-      }
+    if( typeof(account) !== 'undefined' && (account) ){
+      var userEncoded = Base64.encode(account.email+':'+account.pass);
+      $http.defaults.headers.common['Authorization'] = 'Basic ' + userEncoded;
+    }
 
-      if( typeof(template) === 'undefined') template = "Requesting... ";
+    if( typeof(template) === 'undefined') template = "Requesting... ";
 
-      $ionicLoading.show({ template: template + "<i class='icon ion-loading-c'></i>"});
+    $ionicLoading.show({ template: template + "<i class='icon ion-loading-c'></i>"});
+console.log( 'data: ', data);
+    var request = $http({
+      method: 'GET',
+      data: data,
+      url: $localStorage.settings.sparkApiUrl + path
+    });
 
-      var request = $http({
-        method: 'GET',
-        url: $localStorage.settings.sparkApiUrl + path
-      });
+    return( request.then(handleSuccess, handleError));
 
-      return( request.then(handleSuccess, handleError));
-
-    }; // fetch
+  }; // fetch
 
   function handleSuccess(response, status){
     $ionicLoading.hide();
@@ -87,27 +88,33 @@ angular.module('starter.services', [])
   }
 })
 
-/**
- * A simple example service that returns some data.
- */
-.factory('Friends', function() {
-  // Might use a resource here that returns a JSON array
+/*=====================================
+=            Cores Service            =
+=====================================*/
 
-  // Some fake testing data
-  var friends = [
-    { id: 0, name: 'Scruff McGruff' },
-    { id: 1, name: 'G.I. Joe' },
-    { id: 2, name: 'Miss Frizzle' },
-    { id: 3, name: 'Ash Ketchum' }
-  ];
-
+.factory('Cores', function($localStorage) {
   return {
     all: function() {
-      return friends;
+      return $localStorage.cores;
     },
-    get: function(friendId) {
-      // Simple index lookup
-      return friends[friendId];
+    add: function(core) {
+      $localStorage.cores[core.id] = core;
+      return account;
+    },
+    get: function(coreId){
+      return $localStorage.cores[coreId];
+    },
+    update: function(core){
+      $localStorage.accounts[core.id] = core;
+    },
+    delete: function(coreId){
+      delete $localStorage.core[coreId];
+    },
+    getLastActiveIndex: function() {
+      return parseInt(window.localStorage['lastActiveProject']) || 0;
+    },
+    setLastActiveIndex: function(index) {
+      window.localStorage['lastActiveProject'] = index;
     }
   }
 })

@@ -27,7 +27,7 @@ angular.module('starter.controllers', ['ngStorage'])
 	    $scope.modal = modal;
 	});
 
-	// Load or initialize projects
+	// Load or initialize accounts
   	$scope.accounts = Accounts.all();
 
 })
@@ -63,7 +63,7 @@ angular.module('starter.controllers', ['ngStorage'])
 /**
  * Modal Popup box and a few button functions
  */
-.controller('CreateAcctCtrl', function($localStorage, $scope, $ionicModal, $http, Accounts, SparkAPI) {
+.controller('CreateAcctCtrl', function($scope, $localStorage, $ionicModal, Accounts, SparkAPI) {
 
 	// Defaults
 	$scope.user = {email: "", pass: "", auth: "", valid: 0, checkok: {ok: false, errormsg:""}, token: {} }
@@ -79,7 +79,7 @@ angular.module('starter.controllers', ['ngStorage'])
 
 		//$ionicLoading.show({ template: "Testing credentials... <i class='icon ion-loading-c'></i>"});
 
-		SparkAPI.fetch('access_tokens', $scope.user, "Testing credentials...").then(
+		SparkAPI.fetch('access_tokens', $scope.user, false, "Testing credentials...").then(
 
 			// success
 			function(data){
@@ -145,19 +145,55 @@ angular.module('starter.controllers', ['ngStorage'])
 =            Cores Tab            =
 =================================*/
 
-.controller('CoresCtrl', function($localStorage, $scope, $ionicModal) {
+.controller('CoresCtrl', function($localStorage, $scope, $ionicModal, Accounts, Cores) {
 	console.log('loaded cores page');
 	$ionicModal.fromTemplateUrl('templates/modals/modal-add-core.html', {
-	    scope: $scope,
-	    animation: 'slide-in-up'
-	  }).then(function(modal) {
-	    $scope.modal = modal;
-	  });
+	  scope: $scope,
+	  animation: 'slide-in-up'
+	}).then(function(modal) {
+	  $scope.modal = modal;
+	});
+
+	// Load or initialize projects
+  	$scope.accounts = Accounts.all();
+})
+
+.controller('AddCoreCtrl', function( $scope, $localStorage, $ionicModal, Accounts, SparkAPI) {
+
+	$scope.change = function(){
+		var account = getObjByKey( 'id', $scope.account.id, Accounts.all() ),
+			httpData = {
+				access_token: account.token.token
+			};
+
+
+		SparkAPI.fetch('devices', null, httpData, "Retrieving Cores...").then(
+
+			// success
+			function(data){
+				console.log('yep', data);
+
+	        // failure
+			}, function(error){
+				console.log('boo', error);
+			}
+		); // sparkapi
+	};
 
 })
+
+/*================================
+=            Data Tab            =
+================================*/
 
 .controller('DataCtrl', function($scope) {
 })
+
+
+
+/*====================================
+=            Settings Tab            =
+====================================*/
 
 .controller('SettingsCtrl', function($localStorage, $scope, $ionicModal) {
 
