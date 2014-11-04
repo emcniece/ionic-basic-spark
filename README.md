@@ -1,15 +1,15 @@
-ionic-heroku-button
+ionic-basic-spark
 ===================
 
-A one-click Ionic app template for Heroku
+A developer-friendly NodeJS / AngularJS tool for monitoring Spark cores
 
 ## Deploying locally
 
 Make sure you have [Node.js](http://nodejs.org/) and the [Heroku Toolbelt](https://toolbelt.heroku.com/) installed.
 
 ```sh
-git clone git@github.com:driftyco/ionic-heroku-button.git # or clone your own fork
-cd ionic-heroku-button
+git clone git@github.com:emcniece/ionic-basic-spark.git # or clone your own fork
+cd ionic-basic-spark
 npm install
 npm start
 ```
@@ -24,10 +24,6 @@ git push heroku master
 heroku open
 ```
 
-Alternatively, you can deploy your own copy of the app using this button:
-
-[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
-
 ## Documentation
 
-For more information about using Heroku, check out https://devcenter.heroku.com/
+None really. Submit a support request!
