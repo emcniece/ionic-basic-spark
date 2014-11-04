@@ -136,7 +136,7 @@ angular.module('starter.controllers', ['ngStorage'])
         } else{
           alert('Account '+$scope.user.email+' exists!');
         }
-    }
+    };
 })
 
 
