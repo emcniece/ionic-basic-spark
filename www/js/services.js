@@ -6,7 +6,7 @@ angular.module('starter.services', [])
 .service('SparkAPI', function($localStorage, $http, $q, $ionicLoading){
   return {
     fetch: fetch
-  }
+  };
 
   function fetch(path, account, data, template){
 
@@ -18,7 +18,9 @@ angular.module('starter.services', [])
     if( typeof(template) === 'undefined') template = "Requesting... ";
 
     $ionicLoading.show({ template: template + "<i class='icon ion-loading-c'></i>"});
-console.log( 'data: ', data);
+
+    console.log( 'data: ', data);
+
     var request = $http({
       method: 'GET',
       data: data,
@@ -27,7 +29,7 @@ console.log( 'data: ', data);
 
     return( request.then(handleSuccess, handleError));
 
-  }; // fetch
+  } // fetch
 
   function handleSuccess(response, status){
     $ionicLoading.hide();
@@ -80,12 +82,12 @@ console.log( 'data: ', data);
       delete $localStorage.accounts[accountId];
     },
     getLastActiveIndex: function() {
-      return parseInt(window.localStorage['lastActiveProject']) || 0;
+      return parseInt(window.localStorage['lastActiveProject'], 10) || 0;
     },
     setLastActiveIndex: function(index) {
       window.localStorage['lastActiveProject'] = index;
     }
-  }
+  };
 })
 
 /*=====================================
@@ -111,12 +113,12 @@ console.log( 'data: ', data);
       delete $localStorage.core[coreId];
     },
     getLastActiveIndex: function() {
-      return parseInt(window.localStorage['lastActiveProject']) || 0;
+      return parseInt(window.localStorage['lastActiveProject'], 10) || 0;
     },
     setLastActiveIndex: function(index) {
       window.localStorage['lastActiveProject'] = index;
     }
-  }
+  };
 })
 
 ;
