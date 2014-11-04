@@ -20,6 +20,8 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
       StatusBar.styleDefault();
     }
 
+    console.log( spark.login);
+
     // Load default settings and variables
     $localStorage.$default({
       'accounts': [],

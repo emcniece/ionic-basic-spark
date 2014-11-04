@@ -160,6 +160,8 @@ angular.module('starter.controllers', ['ngStorage'])
 
 .controller('AddCoreCtrl', function( $scope, $localStorage, $ionicModal, Accounts, SparkAPI) {
 
+    $scope.errorMsg = false;
+
     $scope.change = function(){
         var account = getObjByKey( 'id', $scope.account.id, Accounts.all() ),
             httpData = {
@@ -172,10 +174,11 @@ angular.module('starter.controllers', ['ngStorage'])
             // success
             function(data){
                 console.log('yep', data);
+                $scope.cores = data;
 
             // failure
             }, function(error){
-                console.log('boo', error);
+                $scope.errorMsg = error;
             }
         ); // sparkapi
     };

@@ -8,7 +8,7 @@ angular.module('starter.services', [])
     fetch: fetch
   };
 
-  function fetch(path, account, data, template){
+  function fetch(path, account, params, template){
 
     if( typeof(account) !== 'undefined' && (account) ){
       var userEncoded = Base64.encode(account.email+':'+account.pass);
@@ -19,11 +19,11 @@ angular.module('starter.services', [])
 
     $ionicLoading.show({ template: template + "<i class='icon ion-loading-c'></i>"});
 
-    console.log( 'data: ', data);
+    console.log( 'params: ', params);
 
     var request = $http({
       method: 'GET',
-      data: data,
+      params: params,
       url: $localStorage.settings.sparkApiUrl + path
     });
 
@@ -36,14 +36,14 @@ angular.module('starter.services', [])
     return response.data;
   }
   function handleError(response){
-
+    console.log('AJAX error: ', response);
     $ionicLoading.hide();
     if (! angular.isObject( response.data ) || !response.statusText) {
       return( $q.reject( "An unknown error occurred." ) );
     }
 
     // Otherwise, use expected error message.
-    return( $q.reject( response.statusText ) );
+    return( $q.reject( response.data.error_description || response.statusText ) );
   }
 
 
