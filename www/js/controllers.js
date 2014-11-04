@@ -2,11 +2,6 @@ angular.module('starter.controllers', ['ngStorage'])
 
 .controller('DashCtrl', ['$localStorage', '$scope',
 	function($localStorage, $scope) {
-
-		$localStorage.cores = 1;
-
-		console.log( $localStorage);
-
 	}
 ])
 
@@ -21,7 +16,7 @@ angular.module('starter.controllers', ['ngStorage'])
 /*====================================
 =            Accounts Tab            =
 ====================================*/
-.controller('AccountCtrl', function($localStorage, $scope, $ionicModal) {
+.controller('AccountCtrl', function($localStorage, $scope, $ionicModal, Accounts) {
 	console.log('loaded acct page');
 
 	// Add new account modal
@@ -30,14 +25,45 @@ angular.module('starter.controllers', ['ngStorage'])
 	    animation: 'slide-in-up'
 	  }).then(function(modal) {
 	    $scope.modal = modal;
-	  });
+	});
+
+	// Load or initialize projects
+  	$scope.accounts = Accounts.all();
+
+})
+
+.controller('AccountDetailCtrl', function($scope, $ionicNavBarDelegate, $stateParams, Accounts) {
+  $scope.account = Accounts.get($stateParams.id);
+
+  $scope.goBack = function() {
+    $ionicNavBarDelegate.back();
+  };
+
+  $scope.deleteAcct = function(){
+	$ionicNavBarDelegate.back();
+  	Accounts.delete($scope.account.id);
+  }
+
+})
+
+.controller('AccountTokenCtrl', function($scope, $ionicNavBarDelegate, $stateParams, Accounts) {
+  $scope.account = Accounts.get($stateParams.id);
+
+  $scope.goBack = function() {
+    $ionicNavBarDelegate.back();
+  };
+
+  $scope.deleteAcct = function(){
+	$ionicNavBarDelegate.back();
+  	Accounts.delete($scope.account.id);
+  }
 
 })
 
 /**
  * Modal Popup box and a few button functions
  */
-.controller('CreateAcctCtrl', function($localStorage, $scope, $ionicModal, $ionicLoading, $http, Accounts) {
+.controller('CreateAcctCtrl', function($localStorage, $scope, $ionicModal, $http, Accounts, SparkAPI) {
 
 	// Defaults
 	$scope.user = {email: "", pass: "", auth: "", valid: 0, checkok: {ok: false, errormsg:""}, token: {} }
@@ -51,50 +77,61 @@ angular.module('starter.controllers', ['ngStorage'])
 			return false;
 		}
 
-		$ionicLoading.show({ template: "Testing credentials... <i class='icon ion-loading-c'></i>"});
+		//$ionicLoading.show({ template: "Testing credentials... <i class='icon ion-loading-c'></i>"});
 
-		var userEncoded = Base64.encode($scope.user.email+':'+$scope.user.pass);
+		SparkAPI.fetch('access_tokens', $scope.user, "Testing credentials...").then(
 
-    	$http.defaults.headers.common['Authorization'] = 'Basic ' + userEncoded;
-		$http({
-			method: 'GET',
-			url: "https://api.spark.io/v1/access_tokens"
-		})
-        .error(function(data, status, headers, config) {
+			// success
+			function(data){
+				var userEncoded = Base64.encode($scope.user.email+':'+$scope.user.pass);
 
-            $ionicLoading.hide();
-            $scope.user.checkok.okmsg = data.ok;
-            $scope.user.checkok.errormsg = data.errors[0];
-        })
-        .success(function(data, status, headers, config) {
+				$scope.user.checkok.okmsg = true;
+	            $scope.user.auth = userEncoded;
+	            $scope.user.valid=1;
 
-            $ionicLoading.hide();
-            $scope.user.checkok.okmsg = data.ok;
-            $scope.user.auth = userEncoded;
-            $scope.user.valid=1;
+	            // set most recent token
+	            var latestTime = Date.parse(Date());
+	            angular.forEach(data, function(value, key){
+	            	var tempDate = Date.parse(value.expires_at);
+	            	if( tempDate > latestTime) $scope.user.token = value;
+	            });
 
-            // set most recent token
-            var latestTime = Date.parse(Date());
-            angular.forEach(data, function(value, key){
-            	var tempDate = Date.parse(value.expires_at);
-            	if( tempDate > latestTime) $scope.user.token = value.token;
-            });
-
-        });
+	        // failure
+			}, function(error){
+				console.log('boo', error);
+				$scope.user.checkok.okmsg = false;
+            	$scope.user.checkok.errormsg = error;
+			}
+		);
 
 	} // scope.checkAcct
 
 	// Adds acct from $scope.checkAcct to $localStorage for later use
 	$scope.createAcct = function(){
+		var accts = $localStorage.accounts;
+		if( typeof(accts) === 'undefined'){
+			$localStorage.accounts = {};
+			accts = {};
+		}
 
-		if( JSON.stringify($localStorage.accounts).indexOf($scope.user.email) === -1){
+		if( (typeof(accts) === 'undefined') || (JSON.stringify(accts).indexOf($scope.user.email) === -1)){
+			// Find latest id
+			var hID = 0;
+			if( Object.size(accts) ){
+				angular.forEach(accts, function(value, key){
+	            	if( value.id == hID) hID++;
+	            });
+			}
+
 			// Clean unwanted data
 		    var newAcct = {
+		    	id: hID,
 		    	email: $scope.user.email,
 		    	auth: $scope.user.auth,
 		    	token: $scope.user.token
 		    }
-	    	Accounts.addAccount(newAcct);
+	    	//Accounts.addAccount(newAcct);
+	    	Accounts.add(newAcct);
 	    	$scope.modal.hide()
 		} else{
 		  alert('Account '+$scope.user.email+' exists!');
@@ -128,7 +165,7 @@ angular.module('starter.controllers', ['ngStorage'])
 
 	$scope.clearAllData = function(){
 		if( confirm('Cannot undo - clear all app localstorage data?')){
-			window.localStorage.clear();
+			$localStorage.$reset();
 			console.log('cleared', $localStorage);
 		}
 	}

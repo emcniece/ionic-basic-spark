@@ -1,4 +1,7 @@
 /* Empty. Add your own CSS if you like */
+ion-nav-view{
+	background-color:#fff;
+}
 .align-center{ text-align: center; }
 .align-left{ text-align: left; }
 .align-right{ text-align: right; }
@@ -16,4 +19,10 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
 #home h4, #home h5, #home h6, #home p, #home span, #home a, #home ul, #home li, #home button, #home input{
 	font-family: "Gotham SSm A","Gotham SSm B",proxima-nova,"Helvetica Neue",helvetica,arial,sans-serif;
 	font-weight: 300;
+}
+.list h1, .list h2, .list h3, .list h4, .list h5, .list h6{
+	font-weight: 300;
+}
+.list em{
+	font-style: italic;
 }

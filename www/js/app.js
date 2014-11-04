@@ -27,29 +27,17 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
     }
 
     // Load default settings and variables
-    
-    angular.extend($localStorage, {
-      accounts: [],
-      cores: {},
-      sparkData: {},
-      settings: {
+    $localStorage.$default({
+      'accounts': [],
+      'cores': {},
+      'sparkData': {},
+      'settings': {
         sparkApiUrl: "https://api.spark.io/v1/"
       }
     });
-    
-    /*
-    angular.extend({
-      accounts: [],
-      cores: {},
-      sparkData: {},
-      settings: {
-        sparkApiUrl: "https://api.spark.io/v1/"
-      }
-    }, $localStorage);
-    */
 
-    console.log( 'Loaded storage: ', $localStorage);
-  });
+
+  }); // .run
 
 })
 
@@ -63,7 +51,7 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
 
     // setup an abstract state for the tabs directive
     .state('tab', {
-      url: "/tab",
+      url: "",
       abstract: true,
       templateUrl: "templates/tabs.html"
     })
@@ -80,35 +68,30 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
       }
     })
 
-    /*
-    .state('tab.friends', {
-      url: '/friends',
-      views: {
-        'tab-friends': {
-          templateUrl: 'templates/tabs/tab-friends.html',
-          controller: 'FriendsCtrl'
-        }
-      }
-    })
-    .state('tab.friend-detail', {
-      url: '/friend/:friendId',
-      views: {
-        'tab-friends': {
-          templateUrl: 'templates/friend-detail.html',
-          controller: 'FriendDetailCtrl'
-        }
-      }
-    })
-*/
-
-    // customization start
-
     .state('tab.accounts', {
       url: '/accounts',
       views: {
         'tab-accounts': {
           templateUrl: 'templates/tabs/tab-accounts.html',
           controller: 'AccountCtrl'
+        }
+      }
+    })
+    .state('tab.account-detail', {
+      url: '/accounts/:id',
+      views: {
+        'tab-accounts': {
+          templateUrl: 'templates/detail/account-detail.html',
+          controller: 'AccountDetailCtrl'
+        }
+      }
+    })
+    .state('tab.account-token', {
+      url: '/accounts/:id/tokens',
+      views: {
+        'tab-accounts': {
+          templateUrl: 'templates/detail/account-tokens.html',
+          controller: 'AccountTokenCtrl'
         }
       }
     })
@@ -146,7 +129,7 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
     ; // $stateProvider
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/dash');
+  $urlRouterProvider.otherwise('/dash');
 
 });
 

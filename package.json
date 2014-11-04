@@ -1,6 +1,6 @@
 {
-  "name": "ionic-heroku",
-  "description": "Ionic Node.js Heroku app",
+  "name": "ionic-basic-spark",
+  "description": "Ionic Basic Spark core monitoring app",
   "version": "0.0.1",
   "private": true,
   "dependencies": {
@@ -8,6 +8,7 @@
     "express": "~4.4.3",
     "livereload": "^0.3.4",
     "ng-storage": "^0.3.1",
+    "spark": "^0.2.2",
     "sparkcloud": "^0.3.0"
   }
 }

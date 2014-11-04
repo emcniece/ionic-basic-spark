@@ -7,13 +7,14 @@
 
   <ion-content has-header="true">
 
-	<p>Accounts here</p>
-
     <ion-list>
-      <ion-item ng-repeat="friend in friends" type="item-text-wrap" href="#/tab/account/{{friend.id}}">
-        {{friend.name}}
+      <ion-item ng-repeat="account in accounts" type="item-text-wrap"  class="item-icon-right" href="#/accounts/{{account.id}}">
+        <h2>{{account.email}}</h2>
+        <p><em>Active token expires at {{account.token.expires_at}}</em></p>
+        <i class="icon ion-chevron-right"></i>
       </ion-item>
     </ion-list>
+
   </ion-content>
 </ion-view>
 
