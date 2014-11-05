@@ -20,8 +20,6 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
       StatusBar.styleDefault();
     }
 
-    console.log( spark.login);
-
     // Load default settings and variables
     $localStorage.$default({
       'accounts': [],
@@ -98,6 +96,15 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
         'tab-cores': {
           templateUrl: 'templates/tabs/tab-cores.html',
           controller: 'CoresCtrl'
+        }
+      }
+    })
+    .state('tab.core-detail', {
+      url: '/cores/:id',
+      views: {
+        'tab-cores': {
+          templateUrl: 'templates/detail/core-detail.html',
+          controller: 'CoreDetailCtrl'
         }
       }
     })

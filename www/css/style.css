@@ -29,3 +29,9 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
 .modal .item{
 	margin:-1px 0;
 }
+#home .item-checkbox p{
+	margin:0;
+}
+#home .item-checkbox.item-icon-right .button.icon{
+	max-height:none;
+}

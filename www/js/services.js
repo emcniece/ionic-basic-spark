@@ -33,10 +33,12 @@ angular.module('starter.services', [])
 
   function handleSuccess(response, status){
     $ionicLoading.hide();
+    console.log('SparkAPI success: ', response);
     return response.data;
   }
+
   function handleError(response){
-    console.log('AJAX error: ', response);
+    console.log('SparkAPI error: ', response);
     $ionicLoading.hide();
     if (! angular.isObject( response.data ) || !response.statusText) {
       return( $q.reject( "An unknown error occurred." ) );
@@ -101,7 +103,7 @@ angular.module('starter.services', [])
     },
     add: function(core) {
       $localStorage.cores[core.id] = core;
-      return account;
+      return core;
     },
     get: function(coreId){
       return $localStorage.cores[coreId];

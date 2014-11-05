@@ -155,33 +155,71 @@ angular.module('starter.controllers', ['ngStorage'])
     });
 
     // Load or initialize projects
-    $scope.accounts = Accounts.all();
+    $scope.cores = Cores.all();
 })
 
-.controller('AddCoreCtrl', function( $scope, $localStorage, $ionicModal, Accounts, SparkAPI) {
+.controller('AddCoreCtrl', function( $scope, $localStorage, $ionicModal, Accounts, Cores, SparkAPI) {
 
     $scope.errorMsg = false;
+    $scope.accounts = Accounts.all();
 
     $scope.change = function(){
-        var account = getObjByKey( 'id', $scope.account.id, Accounts.all() ),
-            httpData = {
-                access_token: account.token.token
-            };
+      var account = getObjByKey( 'id', $scope.account.id, Accounts.all() ),
+        httpData = {
+            access_token: account.token.token
+        };
 
+      SparkAPI.fetch('devices', null, httpData, "Retrieving Cores...").then(
 
-        SparkAPI.fetch('devices', null, httpData, "Retrieving Cores...").then(
+        // success
+        function(data){
+          $scope.accountCores = data;
 
-            // success
-            function(data){
-                console.log('yep', data);
-                $scope.cores = data;
+        // failure
+        }, function(error){
+          $scope.errorMsg = error;
+        }
+      ); // SparkAPI
 
-            // failure
-            }, function(error){
-                $scope.errorMsg = error;
-            }
-        ); // sparkapi
     };
+
+    $scope.selectCore = function(core){
+
+      // Toggle 'selected' attribute
+      if( (typeof(core.selected) === 'undefined') || (core.selected == false) ){
+        core.selected = true;
+      } else{
+        core.selected = false;
+      }
+
+    };
+
+    $scope.addSelectedCores = function(){
+
+      // Compile selected cores
+      var selectedCores = [];
+      angular.forEach($scope.accountCores, function(core){
+        if( core.selected == true) Cores.add(core); //selectedCores.push(core);
+      });
+
+      $scope.cores = selectedCores;
+      $scope.modal.hide()
+
+    };
+
+})
+
+.controller('CoreDetailCtrl', function($scope, $ionicNavBarDelegate, $stateParams, Cores) {
+  $scope.core = Cores.get($stateParams.id);
+
+  $scope.goBack = function() {
+    $ionicNavBarDelegate.back();
+  };
+
+  $scope.deleteCore = function(){
+    $ionicNavBarDelegate.back();
+    Cores.delete($scope.core.id);
+  };
 
 })
 
