@@ -154,6 +154,14 @@ angular.module('starter.controllers', ['ngStorage'])
       $scope.modal = modal;
     });
 
+    $scope.doRefresh = function() {
+      console.log( $scope.cores);
+      console.log( {name: 'Incoming todo ' + Date.now()} );
+      //$scope.todos.unshift({name: 'Incoming todo ' + Date.now()});
+      $scope.$broadcast('scroll.refreshComplete');
+      $scope.$apply();
+    };
+
     // Load or initialize projects
     $scope.cores = Cores.all();
 })
@@ -186,7 +194,7 @@ angular.module('starter.controllers', ['ngStorage'])
     $scope.selectCore = function(core){
 
       // Toggle 'selected' attribute
-      if( (typeof(core.selected) === 'undefined') || (core.selected == false) ){
+      if( (typeof(core.selected) === 'undefined') || (core.selected === false) ){
         core.selected = true;
       } else{
         core.selected = false;
@@ -197,13 +205,17 @@ angular.module('starter.controllers', ['ngStorage'])
     $scope.addSelectedCores = function(){
 
       // Compile selected cores
+      var acctToken = Accounts.get($scope.account.id).token.token;
       var selectedCores = [];
       angular.forEach($scope.accountCores, function(core){
-        if( core.selected == true) Cores.add(core); //selectedCores.push(core);
+
+        // Add associated account token to core for storage and quick access
+        core['acctToken'] = acctToken;
+        if( core.selected === true) Cores.add(core); //selectedCores.push(core);
       });
 
       $scope.cores = selectedCores;
-      $scope.modal.hide()
+      $scope.modal.hide();
 
     };
 
