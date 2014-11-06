@@ -76,7 +76,7 @@ angular.module('starter.services', [])
       return account;
     },
     get: function(accountId){
-      return $localStorage.accounts[accountId];
+      return $localStorage.accounts[accountId] || false;
     },
     update: function(account){
       $localStorage.accounts[account.id] = account;
@@ -107,7 +107,7 @@ angular.module('starter.services', [])
       return core;
     },
     get: function(coreId){
-      return $localStorage.cores[coreId];
+      return $localStorage.cores[coreId] || false;
     },
     update: function(core){
       $localStorage.accounts[core.id] = core;
