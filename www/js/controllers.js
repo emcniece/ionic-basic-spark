@@ -132,6 +132,7 @@ angular.module('starter.controllers', ['ngStorage'])
             };
 
             Accounts.add(newAcct);
+            $scope.accounts = Accounts.all();
             $scope.modal.hide();
         } else{
           alert('Account '+$scope.user.email+' exists!');
@@ -181,6 +182,10 @@ angular.module('starter.controllers', ['ngStorage'])
 
             // TODO :: Update core details
             console.log('yay', $scope.acctsProcessed+'/'+$scope.acctsToProcess, data);
+            angular.forEach(data, function(core){
+              if( !Cores.get(core.id)) Cores.update(core);
+              console.log( 'updated', core.name);
+            });
 
             // Leave if we're done
             if( ($scope.acctsToProcess == $scope.acctsProcessed)  ){
@@ -191,7 +196,6 @@ angular.module('starter.controllers', ['ngStorage'])
           // failure
           }, function(error){
             $scope.acctsProcessed++;
-            console.log('fail', data);
           }
         ); // SparkAPI
 

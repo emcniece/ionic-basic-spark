@@ -6,6 +6,11 @@
   </ion-header-bar>
 
   <ion-content>
+    <ion-refresher
+      pulling-text="Pull to refresh"
+      refreshing-text="Polling {{acctsProcessed+1}} of {{acctsToProcess}} accounts..."
+      on-refresh="doRefresh()">
+    </ion-refresher>
 
     <ion-list>
       <ion-item ng-repeat="core in cores" type="item-text-wrap"  class="item-icon-left item-icon-right" href="#/cores/{{core.id}}">

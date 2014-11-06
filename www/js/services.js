@@ -110,7 +110,8 @@ angular.module('starter.services', [])
       return $localStorage.cores[coreId] || false;
     },
     update: function(core){
-      $localStorage.accounts[core.id] = core;
+      angular.extend( $localStorage.cores[core.id], core );
+      //$localStorage.accounts[core.id] = core;
     },
     delete: function(coreId){
       delete $localStorage.core[coreId];
