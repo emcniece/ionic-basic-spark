@@ -145,7 +145,7 @@ angular.module('starter.controllers', ['ngStorage'])
 =            Cores Tab            =
 =================================*/
 
-.controller('CoresCtrl', function($localStorage, $scope, $ionicModal, Accounts, Cores) {
+.controller('CoresCtrl', function($localStorage, $scope, $timeout, $ionicModal, Accounts, Cores, SparkAPI) {
     console.log('loaded cores page');
     $ionicModal.fromTemplateUrl('templates/modals/modal-add-core.html', {
       scope: $scope,
@@ -155,11 +155,53 @@ angular.module('starter.controllers', ['ngStorage'])
     });
 
     $scope.doRefresh = function() {
-      console.log( $scope.cores);
       console.log( {name: 'Incoming todo ' + Date.now()} );
+
+      // Gather accounts from listed cores
+      $scope.activeAcctTokens = {};
+      $scope.acctsProcessed = 0; // 1-based index for readability
+      $scope.acctsToProcess = 0;
+
+      angular.forEach($scope.cores, function(core){
+        if( typeof(core.acctToken) !== 'undefined'){
+          $scope.activeAcctTokens[core.acctToken] = core.acctToken;
+        }
+      });
+
+      $scope.acctsToProcess = Object.size($scope.activeAcctTokens);
+
+      // Poll unique accounts for core details
+      angular.forEach($scope.activeAcctTokens, function(token){
+
+        SparkAPI.fetch('devices', null, {access_token: token} ).then(
+
+          // success
+          function(data){
+            $scope.acctsProcessed++;
+
+            // TODO :: Update core details
+            console.log('yay', $scope.acctsProcessed+'/'+$scope.acctsToProcess, data);
+
+            // Leave if we're done
+            if( ($scope.acctsToProcess == $scope.acctsProcessed)  ){
+              $scope.$broadcast('scroll.refreshComplete');
+              $timeout(function(){ $scope.$apply(); });
+            }
+
+          // failure
+          }, function(error){
+            $scope.acctsProcessed++;
+            console.log('fail', data);
+          }
+        ); // SparkAPI
+
+
+      });
+
+
       //$scope.todos.unshift({name: 'Incoming todo ' + Date.now()});
-      $scope.$broadcast('scroll.refreshComplete');
-      $scope.$apply();
+      //$scope.$broadcast('scroll.refreshComplete');
+      //$scope.$apply();
     };
 
     // Load or initialize projects
