@@ -15,9 +15,10 @@ angular.module('starter.services', [])
       $http.defaults.headers.common['Authorization'] = 'Basic ' + userEncoded;
     }
 
-    if( typeof(template) === 'undefined') template = "Requesting... ";
-
-    $ionicLoading.show({ template: template + "<i class='icon ion-loading-c'></i>"});
+    if( typeof(template) !== 'undefined'){
+      template += " <i class='icon ion-loading-c'></i> ";
+      $ionicLoading.show({ template: template + ""});
+    }
 
     console.log( 'params: ', params);
 
