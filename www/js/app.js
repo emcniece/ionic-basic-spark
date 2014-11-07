@@ -62,6 +62,16 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
       }
     })
 
+    .state('tab.about', {
+      url: '/dash/about',
+      views: {
+        'tab-dash': {
+          templateUrl: 'templates/tabs/tab-about.html',
+          controller: 'DashCtrl'
+        }
+      }
+    })
+
     .state('tab.accounts', {
       url: '/accounts',
       views: {
