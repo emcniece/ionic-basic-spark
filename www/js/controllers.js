@@ -119,7 +119,7 @@ angular.module('starter.controllers', ['ngStorage'])
             var hID = 0;
             if( Object.size(accts) ){
                 angular.forEach(accts, function(value, key){
-                    if( value.id == hID) hID++;
+                    if( ( typeof(value.id) !== 'undefined') && (value.id == hID)) hID++;
                 });
             }
 
@@ -283,9 +283,10 @@ angular.module('starter.controllers', ['ngStorage'])
     $ionicNavBarDelegate.back();
   };
 
-  $scope.deleteCore = function(){
+  $scope.deleteCore = function(coreId){
+    if(typeof(coreId) === 'undefined') coreId = $scope.core.id;
     $ionicNavBarDelegate.back();
-    Cores.delete($scope.core.id);
+    Cores.delete(coreId);
   };
 
 })

@@ -93,9 +93,9 @@ angular.module('starter.services', [])
       return account;
     },
     update: function(account){
-      var merged = merge($localStorage.accounts[account.id], core)
+      var merged = merge(account, $localStorage.account[account.id])
 
-      console.log( '$lS Account :: Update: ', core, merged);
+      console.log( '$lS Account :: Update: ', account, merged);
       $localStorage.accounts[account.id] = merged;
     },
     delete: function(accountId){
@@ -131,13 +131,13 @@ angular.module('starter.services', [])
       return get;
     },
     update: function(core){
-      var merged = merge($localStorage.cores[core.id], core)
+      var merged = merge(core, $localStorage.cores[core.id])
 
       console.log( '$lS Cores :: Update: ', core, merged);
       $localStorage.cores[core.id] = merged;
     },
     delete: function(coreId){
-      delete $localStorage.core[coreId];
+      delete $localStorage.cores[coreId];
     },
     getLastActiveIndex: function() {
       return parseInt(window.localStorage['lastActiveProject'], 10) || 0;

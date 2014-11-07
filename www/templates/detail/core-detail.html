@@ -2,19 +2,17 @@
   <ion-content has-header="true" padding="false">
 
   	<div class="list">
-  		<span class="item item-icon-left">
-  			<i class="icon ion-email"></i>
-  			{{account.email}}
-  		</span>
 
   		<span class="item item-icon-left">
-  			<i class="icon ion-information"></i>
-  			System ID <span class="item-note">{{account.id}}</span>
+  			<i class="icon ion-power"></i>
+  			Status
+          <span class="badge badge-dark" ng-hide="core.connected">Offline</span>
+          <span class="badge badge-balanced" ng-show="core.connected">Online</span>
   		</span>
 
-  		<a class="item item-icon-left item-icon-right" href="#">
+  		<a class="item item-icon-left item-icon-right" href="/#/accounts/{{account.id}}">
   			<i class="icon ion-key"></i>
-  			Auth <span class="item-note">{{account.auth}}</span>
+  			Account <span class="item-note">{{account.email}}</span>
   			<i class="icon ion-chevron-right"></i>
   		</a>
 
@@ -31,7 +29,7 @@
 
   		<div class="row">
   			<div class="col col-33 col-offset-67">
-  				<a href="#/accounts" class="item button button-block button-assertive icon-right ion-trash-a" ng-click="deleteAcct()">Delete</a>
+  				<a href="#/cores" class="item button button-block button-assertive icon-right ion-trash-a" ng-click="deleteCore('{{core.id}}')">Delete</a>
   			</div>
   		</div>
 
