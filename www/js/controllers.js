@@ -1,8 +1,8 @@
 angular.module('starter.controllers', ['ngStorage'])
 
 .controller('DashCtrl', ['$localStorage', '$scope',
-	function($localStorage, $scope) {
-	}
+    function($localStorage, $scope) {
+    }
 ])
 
 .controller('FriendsCtrl', function($scope, Friends) {
@@ -17,18 +17,17 @@ angular.module('starter.controllers', ['ngStorage'])
 =            Accounts Tab            =
 ====================================*/
 .controller('AccountCtrl', function($localStorage, $scope, $ionicModal, Accounts) {
-	console.log('loaded acct page');
 
-	// Add new account modal
-	$ionicModal.fromTemplateUrl('templates/modals/modal-add-account.html', {
-	    scope: $scope,
-	    animation: 'slide-in-up'
-	  }).then(function(modal) {
-	    $scope.modal = modal;
-	});
+    // Add new account modal
+    $ionicModal.fromTemplateUrl('templates/modals/modal-add-account.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+      }).then(function(modal) {
+        $scope.modal = modal;
+    });
 
-	// Load or initialize accounts
-  	$scope.accounts = Accounts.all();
+    // Load or initialize accounts
+    $scope.accounts = Accounts.all();
 
 })
 
@@ -40,9 +39,9 @@ angular.module('starter.controllers', ['ngStorage'])
   };
 
   $scope.deleteAcct = function(){
-	$ionicNavBarDelegate.back();
-  	Accounts.delete($scope.account.id);
-  }
+    $ionicNavBarDelegate.back();
+    Accounts.delete($scope.account.id);
+  };
 
 })
 
@@ -54,9 +53,9 @@ angular.module('starter.controllers', ['ngStorage'])
   };
 
   $scope.deleteAcct = function(){
-	$ionicNavBarDelegate.back();
-  	Accounts.delete($scope.account.id);
-  }
+    $ionicNavBarDelegate.back();
+    Accounts.delete($scope.account.id);
+  };
 
 })
 
@@ -65,78 +64,82 @@ angular.module('starter.controllers', ['ngStorage'])
  */
 .controller('CreateAcctCtrl', function($scope, $localStorage, $ionicModal, Accounts, SparkAPI) {
 
-	// Defaults
-	$scope.user = {email: "", pass: "", auth: "", valid: 0, checkok: {ok: false, errormsg:""}, token: {} }
+    // Defaults
+    $scope.user = {email: "", pass: "", auth: "", valid: 0, checkok: {ok: false, errormsg:""}, token: {} };
 
-	// Checks API for account validity, returns tokens and sets latest active
-	$scope.checkAcct = function(){
+    // Checks API for account validity, returns tokens and sets latest active
+    $scope.checkAcct = function(){
 
-		if( ($scope.user.email === "") || ($scope.user.pass === "") ){
-			$scope.user.checkok.okmsg = false;
-			$scope.user.checkok.errormsg = "empty fields.";
-			return false;
-		}
+        if( ($scope.user.email === "") || ($scope.user.pass === "") ){
+            $scope.user.checkok.okmsg = false;
+            $scope.user.checkok.errormsg = "empty fields.";
+            return false;
+        }
 
-		//$ionicLoading.show({ template: "Testing credentials... <i class='icon ion-loading-c'></i>"});
+        //$ionicLoading.show({ template: "Testing credentials... <i class='icon ion-loading-c'></i>"});
 
-		SparkAPI.fetch('access_tokens', $scope.user, false, "Testing credentials...").then(
+        SparkAPI.fetch('access_tokens', $scope.user, false, "Testing credentials...").then(
 
-			// success
-			function(data){
-				var userEncoded = Base64.encode($scope.user.email+':'+$scope.user.pass);
+            // success
+            function(data){
+                var userEncoded = Base64.encode($scope.user.email+':'+$scope.user.pass);
 
-				$scope.user.checkok.okmsg = true;
-	            $scope.user.auth = userEncoded;
-	            $scope.user.valid=1;
+                $scope.user.checkok.okmsg = true;
+                $scope.user.auth = userEncoded;
+                $scope.user.valid=1;
 
-	            // set most recent token
-	            var latestTime = Date.parse(Date());
-	            angular.forEach(data, function(value, key){
-	            	var tempDate = Date.parse(value.expires_at);
-	            	if( tempDate > latestTime) $scope.user.token = value;
-	            });
+                // set most recent token
+                var latestTime = Date.parse(Date());
+                angular.forEach(data, function(value, key){
+                    var tempDate = Date.parse(value.expires_at);
+                    if( tempDate > latestTime) $scope.user.token = value;
+                });
 
-	        // failure
-			}, function(error){
-				console.log('boo', error);
-				$scope.user.checkok.okmsg = false;
-            	$scope.user.checkok.errormsg = error;
-			}
-		);
+                $scope.createAcct();
 
-	} // scope.checkAcct
+            // failure
+            }, function(error){
+                $scope.user.checkok.okmsg = false;
+                $scope.user.checkok.errormsg = error;
+            }
+        );
 
-	// Adds acct from $scope.checkAcct to $localStorage for later use
-	$scope.createAcct = function(){
-		var accts = $localStorage.accounts;
-		if( typeof(accts) === 'undefined'){
-			$localStorage.accounts = {};
-			accts = {};
-		}
+    }; // scope.checkAcct
 
-		if( (typeof(accts) === 'undefined') || (JSON.stringify(accts).indexOf($scope.user.email) === -1)){
-			// Find latest id
-			var hID = 0;
-			if( Object.size(accts) ){
-				angular.forEach(accts, function(value, key){
-	            	if( value.id == hID) hID++;
-	            });
-			}
+    // Adds acct from $scope.checkAcct to $localStorage for later use
+    $scope.createAcct = function(){
+        var accts = $localStorage.accounts;
+        if( typeof(accts) === 'undefined'){
+            $localStorage.accounts = {};
+            accts = {};
+        }
 
-			// Clean unwanted data
-		    var newAcct = {
-		    	id: hID,
-		    	email: $scope.user.email,
-		    	auth: $scope.user.auth,
-		    	token: $scope.user.token
-		    }
-	    	//Accounts.addAccount(newAcct);
-	    	Accounts.add(newAcct);
-	    	$scope.modal.hide()
-		} else{
-		  alert('Account '+$scope.user.email+' exists!');
-		}
-	}
+        if( (typeof(accts) === 'undefined') || (JSON.stringify(accts).indexOf($scope.user.email) === -1)){
+            // Find latest id
+            var hID = 0;
+            if( Object.size(accts) ){
+                angular.forEach(accts, function(value, key){
+                    if( value.id == hID) hID++;
+                });
+            }
+
+            // Clean unwanted data
+            var newAcct = {
+                id: hID,
+                email: $scope.user.email,
+                auth: $scope.user.auth,
+                token: $scope.user.token
+            };
+
+            Accounts.add(newAcct);
+            $scope.accounts = Accounts.all();
+            $scope.createAccount.$setPristine;
+            $scope.modal.hide();
+        } else{
+          $scope.user.checkok.okmsg = false;
+          $scope.user.checkok.errormsg = 'Account already registered';
+        }
+    };
 })
 
 
@@ -145,40 +148,145 @@ angular.module('starter.controllers', ['ngStorage'])
 =            Cores Tab            =
 =================================*/
 
-.controller('CoresCtrl', function($localStorage, $scope, $ionicModal, Accounts, Cores) {
-	console.log('loaded cores page');
-	$ionicModal.fromTemplateUrl('templates/modals/modal-add-core.html', {
-	  scope: $scope,
-	  animation: 'slide-in-up'
-	}).then(function(modal) {
-	  $scope.modal = modal;
-	});
+.controller('CoresCtrl', function($localStorage, $scope, $timeout, $ionicModal, Accounts, Cores, SparkAPI) {
 
-	// Load or initialize projects
-  	$scope.accounts = Accounts.all();
+    $ionicModal.fromTemplateUrl('templates/modals/modal-add-core.html', {
+      scope: $scope,
+      animation: 'slide-in-up'
+    }).then(function(modal) {
+      $scope.modal = modal;
+    });
+
+    $scope.doRefresh = function() {
+      console.log( {name: 'Incoming todo ' + Date.now()} );
+
+      $scope.activeAcctTokens = {};
+      $scope.acctsProcessed = 0;
+      $scope.acctsToProcess = 0;
+
+      // Gather accounts from listed cores
+      angular.forEach($scope.cores, function(core){
+        if( typeof(core.acctToken) !== 'undefined'){
+          $scope.activeAcctTokens[core.acctToken] = core.acctToken;
+        }
+      });
+
+      $scope.acctsToProcess = Object.size($scope.activeAcctTokens);
+
+      if( $scope.acctsToProcess < 1){
+        $scope.loadingDone();
+        console.log('Core list error: ', $scope.cores);
+        alert('Error - no accounts in core details. Please refresh core list.');
+      }
+
+      // Poll unique accounts for core details
+      angular.forEach($scope.activeAcctTokens, function(token){
+
+        SparkAPI.fetch('devices', null, {access_token: token} ).then(
+
+          // success
+          function(data){
+            $scope.acctsProcessed++;
+
+            // Update core details
+            angular.forEach(data, function(core){
+              if( Cores.get(core.id)){
+                Cores.update(core);
+              }
+            });
+
+            // Leave if we're done
+            if( ($scope.acctsToProcess == $scope.acctsProcessed)  ){
+              $scope.loadingDone();
+            }
+
+          // failure
+          }, function(error){
+            $scope.acctsProcessed++;
+          }
+        ); // SparkAPI
+
+
+      });
+
+    }; // $scope.doRefresh
+
+    $scope.loadingDone = function(){
+      $scope.$broadcast('scroll.refreshComplete');
+      $timeout(function(){ $scope.$apply(); });
+    }
+
+    // Load or initialize projects
+    $scope.cores = Cores.all();
 })
 
-.controller('AddCoreCtrl', function( $scope, $localStorage, $ionicModal, Accounts, SparkAPI) {
+.controller('AddCoreCtrl', function( $scope, $localStorage, $ionicModal, Accounts, Cores, SparkAPI) {
 
-	$scope.change = function(){
-		var account = getObjByKey( 'id', $scope.account.id, Accounts.all() ),
-			httpData = {
-				access_token: account.token.token
-			};
+    $scope.errorMsg = false;
+    $scope.accounts = Accounts.all();
 
+    $scope.change = function(){
+      var account = getObjByKey( 'id', $scope.account.id, Accounts.all() ),
+        httpData = {
+            access_token: account.token.token
+        };
 
-		SparkAPI.fetch('devices', null, httpData, "Retrieving Cores...").then(
+      SparkAPI.fetch('devices', null, httpData, "Retrieving Cores...").then(
 
-			// success
-			function(data){
-				console.log('yep', data);
+        // success
+        function(data){
+          $scope.accountCores = data;
 
-	        // failure
-			}, function(error){
-				console.log('boo', error);
-			}
-		); // sparkapi
-	};
+        // failure
+        }, function(error){
+          $scope.errorMsg = error;
+        }
+      ); // SparkAPI
+
+    };
+
+    $scope.selectCore = function(core){
+
+      // Toggle 'selected' attribute
+      if( (typeof(core.selected) === 'undefined') || (core.selected === false) ){
+        core.selected = true;
+      } else{
+        core.selected = false;
+      }
+
+    };
+
+    $scope.addSelectedCores = function(){
+
+      // Compile selected cores
+      var acctToken = Accounts.get($scope.account.id).token.token;
+      var selectedCores = [];
+      angular.forEach($scope.accountCores, function(core){
+
+        // Add associated account token to core for storage and quick access
+        core['acctToken'] = acctToken;
+        if( core.selected === true) Cores.add(core); //selectedCores.push(core);
+      });
+
+      $scope.cores = selectedCores;
+      $scope.modal.hide();
+
+    };
+
+})
+
+.controller('CoreDetailCtrl', function($scope, $ionicNavBarDelegate, $stateParams, Cores, Accounts) {
+  $scope.core = Cores.get($stateParams.id);
+  $scope.account = Accounts.getByToken($scope.core.acctToken);
+
+  $scope.goBack = function() {
+    $ionicNavBarDelegate.back();
+  };
+
+  $scope.deleteCore = function(){
+    $ionicNavBarDelegate.back();
+    Cores.delete($scope.core.id);
+  };
 
 })
 
@@ -197,14 +305,14 @@ angular.module('starter.controllers', ['ngStorage'])
 
 .controller('SettingsCtrl', function($localStorage, $scope, $ionicModal) {
 
-	$localStorage.testvar = "testing 123";
+    $localStorage.testvar = "testing 123";
 
-	$scope.clearAllData = function(){
-		if( confirm('Cannot undo - clear all app localstorage data?')){
-			$localStorage.$reset();
-			console.log('cleared', $localStorage);
-		}
-	}
+    $scope.clearAllData = function(){
+        if( confirm('Cannot undo - clear all app localstorage data?')){
+            $localStorage.$reset();
+            console.log('cleared', $localStorage);
+        }
+    };
 
 })
 

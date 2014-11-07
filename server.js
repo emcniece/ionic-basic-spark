@@ -1,7 +1,7 @@
-var express = require('express')
-    , app = express()
-    , sparkcloud = require('sparkcloud')
-    , spark = require('spark')
+var express = require('express'),
+    app = express(),
+    sparkcloud = require('sparkcloud'),
+    spark = require('spark')
     ;
 
 app.use(express.static('www'));
