@@ -5,7 +5,7 @@
     </ion-header-bar>
     <ion-content>
 
-      <form name="create-account" ng-controller="CreateAcctCtrl">
+      <form name="createAccount" ng-controller="CreateAcctCtrl">
 	      <div class="list">
     			<label class="item item-input item-stacked-label">
     			  <span class="input-label">Email</span>
@@ -18,21 +18,17 @@
 
   		  </div>
 
-		    <div class="padding" ng-hide="user.valid == '1'" class="ng-show">
-	        <button class="button button-block button-royal" ng-click="checkAcct()">Check Account</button>
+        <div class="padding ajax-messages">
+          <button class="button button-block button-assertive button-clear ng-hide" ng-show="user.checkok.okmsg == false">Error: {{user.checkok.errormsg}}</button>
+        </div>
+
+		    <div class="padding">
+	        <button type="submit" class="button button-block button-balanced" ng-click="checkAcct()">Check Account</button>
 
           <input name="acctvalid" type="hidden" ng-model="user.valid" ng-value="acctvalid">
           <input name="checkok" type="hidden" ng-model="user.checkok.okmsg" ng-value="checkok">
 	      </div>
 
-        <div class="padding ajax-messages">
-          <button class="button button-block button-assertive button-clear ng-hide" ng-show="user.checkok.okmsg == false">Error: {{user.checkok.errormsg}}</button>
-          <button class="button button-block button-royal button-clear ng-hide" ng-show="user.valid == '1'" disabled>Account valid!</button>
-        </div>
-
-        <div class="padding" ng-show="user.valid == '1'" class="ng-hide" >
-          <button class="button button-block button-balanced" ng-click="createAcct()">Create Account</button>
-        </div>
 
   	  </form>
 

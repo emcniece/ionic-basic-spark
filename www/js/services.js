@@ -10,6 +10,7 @@ angular.module('starter.services', [])
 
   function fetch(path, account, params, template){
 
+    delete $http.defaults.headers.common['Authorization'];
     if( typeof(account) !== 'undefined' && (account) ){
       var userEncoded = Base64.encode(account.email+':'+account.pass);
       $http.defaults.headers.common['Authorization'] = 'Basic ' + userEncoded;
@@ -20,7 +21,7 @@ angular.module('starter.services', [])
       $ionicLoading.show({ template: template + ""});
     }
 
-    console.log( 'params: ', params);
+    console.log( 'SparkAPI Send: ', path, params);
 
     var request = $http({
       method: 'GET',
@@ -103,15 +104,21 @@ angular.module('starter.services', [])
       return $localStorage.cores;
     },
     add: function(core) {
+      console.log( '$localStorage :: Adding: ', core);
       $localStorage.cores[core.id] = core;
       return core;
     },
     get: function(coreId){
-      return $localStorage.cores[coreId] || false;
+      var get = $localStorage.cores[coreId] || false
+      console.log( '$localStorage :: Get: ', coreId, get);
+
+      return get;
     },
     update: function(core){
-      angular.extend( $localStorage.cores[core.id], core );
-      //$localStorage.accounts[core.id] = core;
+      var merged = merge($localStorage.cores[core.id], core)
+      console.log( '$localStorage :: Update: ', core, merged);
+      //angular.extend( $localStorage.cores[core.id], core );
+      $localStorage.cores[core.id] = merged;
     },
     delete: function(coreId){
       delete $localStorage.core[coreId];

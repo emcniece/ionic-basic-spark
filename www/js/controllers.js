@@ -17,7 +17,6 @@ angular.module('starter.controllers', ['ngStorage'])
 =            Accounts Tab            =
 ====================================*/
 .controller('AccountCtrl', function($localStorage, $scope, $ionicModal, Accounts) {
-    console.log('loaded acct page');
 
     // Add new account modal
     $ionicModal.fromTemplateUrl('templates/modals/modal-add-account.html', {
@@ -96,9 +95,10 @@ angular.module('starter.controllers', ['ngStorage'])
                     if( tempDate > latestTime) $scope.user.token = value;
                 });
 
+                $scope.createAcct();
+
             // failure
             }, function(error){
-                console.log('boo', error);
                 $scope.user.checkok.okmsg = false;
                 $scope.user.checkok.errormsg = error;
             }
@@ -133,9 +133,11 @@ angular.module('starter.controllers', ['ngStorage'])
 
             Accounts.add(newAcct);
             $scope.accounts = Accounts.all();
+            $scope.createAccount.$setPristine;
             $scope.modal.hide();
         } else{
-          alert('Account '+$scope.user.email+' exists!');
+          $scope.user.checkok.okmsg = false;
+          $scope.user.checkok.errormsg = 'Account already registered';
         }
     };
 })
@@ -147,7 +149,7 @@ angular.module('starter.controllers', ['ngStorage'])
 =================================*/
 
 .controller('CoresCtrl', function($localStorage, $scope, $timeout, $ionicModal, Accounts, Cores, SparkAPI) {
-    console.log('loaded cores page');
+
     $ionicModal.fromTemplateUrl('templates/modals/modal-add-core.html', {
       scope: $scope,
       animation: 'slide-in-up'
@@ -158,18 +160,26 @@ angular.module('starter.controllers', ['ngStorage'])
     $scope.doRefresh = function() {
       console.log( {name: 'Incoming todo ' + Date.now()} );
 
-      // Gather accounts from listed cores
       $scope.activeAcctTokens = {};
-      $scope.acctsProcessed = 0; // 1-based index for readability
+      $scope.acctsProcessed = 0;
       $scope.acctsToProcess = 0;
 
+      // Gather accounts from listed cores
       angular.forEach($scope.cores, function(core){
         if( typeof(core.acctToken) !== 'undefined'){
           $scope.activeAcctTokens[core.acctToken] = core.acctToken;
         }
       });
 
+      console.log($scope.cores, $scope.activeAcctTokens);
+
       $scope.acctsToProcess = Object.size($scope.activeAcctTokens);
+
+      if( $scope.acctsToProcess < 1){
+        $scope.loadingDone();
+        console.log('Core list error: ', $scope.cores);
+        alert('Error - no accounts in core details. Please refresh core list.');
+      }
 
       // Poll unique accounts for core details
       angular.forEach($scope.activeAcctTokens, function(token){
@@ -180,17 +190,17 @@ angular.module('starter.controllers', ['ngStorage'])
           function(data){
             $scope.acctsProcessed++;
 
-            // TODO :: Update core details
-            console.log('yay', $scope.acctsProcessed+'/'+$scope.acctsToProcess, data);
+            // Update core details
             angular.forEach(data, function(core){
-              if( !Cores.get(core.id)) Cores.update(core);
-              console.log( 'updated', core.name);
+              if( Cores.get(core.id)){
+                Cores.update(core);
+                console.log( 'updated', core.name);
+              }
             });
 
             // Leave if we're done
             if( ($scope.acctsToProcess == $scope.acctsProcessed)  ){
-              $scope.$broadcast('scroll.refreshComplete');
-              $timeout(function(){ $scope.$apply(); });
+              $scope.loadingDone();
             }
 
           // failure
@@ -207,6 +217,11 @@ angular.module('starter.controllers', ['ngStorage'])
       //$scope.$broadcast('scroll.refreshComplete');
       //$scope.$apply();
     };
+
+    $scope.loadingDone = function(){
+      $scope.$broadcast('scroll.refreshComplete');
+      $timeout(function(){ $scope.$apply(); });
+    }
 
     // Load or initialize projects
     $scope.cores = Cores.all();
