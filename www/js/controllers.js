@@ -171,8 +171,6 @@ angular.module('starter.controllers', ['ngStorage'])
         }
       });
 
-      console.log($scope.cores, $scope.activeAcctTokens);
-
       $scope.acctsToProcess = Object.size($scope.activeAcctTokens);
 
       if( $scope.acctsToProcess < 1){
@@ -194,7 +192,6 @@ angular.module('starter.controllers', ['ngStorage'])
             angular.forEach(data, function(core){
               if( Cores.get(core.id)){
                 Cores.update(core);
-                console.log( 'updated', core.name);
               }
             });
 
@@ -212,11 +209,7 @@ angular.module('starter.controllers', ['ngStorage'])
 
       });
 
-
-      //$scope.todos.unshift({name: 'Incoming todo ' + Date.now()});
-      //$scope.$broadcast('scroll.refreshComplete');
-      //$scope.$apply();
-    };
+    }; // $scope.doRefresh
 
     $scope.loadingDone = function(){
       $scope.$broadcast('scroll.refreshComplete');
@@ -282,8 +275,9 @@ angular.module('starter.controllers', ['ngStorage'])
 
 })
 
-.controller('CoreDetailCtrl', function($scope, $ionicNavBarDelegate, $stateParams, Cores) {
+.controller('CoreDetailCtrl', function($scope, $ionicNavBarDelegate, $stateParams, Cores, Accounts) {
   $scope.core = Cores.get($stateParams.id);
+  $scope.account = Accounts.getByToken($scope.core.acctToken);
 
   $scope.goBack = function() {
     $ionicNavBarDelegate.back();

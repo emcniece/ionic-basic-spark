@@ -73,14 +73,30 @@ angular.module('starter.services', [])
     },
     */
     add: function(account) {
+      console.log( '$lS Account :: Adding: ', account);
       $localStorage.accounts[account.id] = account;
       return account;
     },
     get: function(accountId){
-      return $localStorage.accounts[accountId] || false;
+      var get = $localStorage.accounts[accountId] || false;
+      console.log( '$lS Account :: Get: ', accountId, get);
+
+      return get;
+    },
+    getByToken: function(accountToken){
+      var account = false;
+      angular.forEach($localStorage.accounts, function(acct, key){
+        if( acct.token.token === accountToken) account = acct;
+      });
+
+      console.log( '$lS Account :: getByToken: ', account);
+      return account;
     },
     update: function(account){
-      $localStorage.accounts[account.id] = account;
+      var merged = merge($localStorage.accounts[account.id], core)
+
+      console.log( '$lS Account :: Update: ', core, merged);
+      $localStorage.accounts[account.id] = merged;
     },
     delete: function(accountId){
       delete $localStorage.accounts[accountId];
@@ -104,20 +120,20 @@ angular.module('starter.services', [])
       return $localStorage.cores;
     },
     add: function(core) {
-      console.log( '$localStorage :: Adding: ', core);
+      console.log( '$lS Cores :: Adding: ', core);
       $localStorage.cores[core.id] = core;
       return core;
     },
     get: function(coreId){
-      var get = $localStorage.cores[coreId] || false
-      console.log( '$localStorage :: Get: ', coreId, get);
+      var get = $localStorage.cores[coreId] || false;
+      console.log( '$lS Cores :: Get: ', coreId, get);
 
       return get;
     },
     update: function(core){
       var merged = merge($localStorage.cores[core.id], core)
-      console.log( '$localStorage :: Update: ', core, merged);
-      //angular.extend( $localStorage.cores[core.id], core );
+
+      console.log( '$lS Cores :: Update: ', core, merged);
       $localStorage.cores[core.id] = merged;
     },
     delete: function(coreId){
