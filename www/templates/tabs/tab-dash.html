@@ -1,5 +1,10 @@
-<ion-view title="Ionic Basic Spark">
-  <ion-content class="padding">
+<!-- <ion-view title="Ionic Basic Spark" hide-nav-bar="true">
+  <ion-content class="padding"> -->
+<ion-side-menus>
+  <!-- Center content -->
+  <ion-side-menu-content ng-controller="DashCtrl">
+
+
     <h1>Dashboard</h1>
 
     <div class="row responsive-sm">
@@ -61,5 +66,16 @@
     	</div>
     </div>
 
-  </ion-content>
-</ion-view>
+  </ion-side-menu-content>
+
+
+<!-- </ion-view> -->
+  <ion-side-menu side="left">
+    <ul class="list">
+  	  <li class="item">Side menu 1</li>
+  	  <li class="item">Side menu 2</li>
+  	  <li class="item">Side menu 3</li>
+  	</ul>
+  </ion-side-menu>
+
+</ion-side-menus>

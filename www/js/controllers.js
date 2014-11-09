@@ -1,9 +1,20 @@
 angular.module('starter.controllers', ['ngStorage'])
 
-.controller('DashCtrl', ['$localStorage', '$scope',
-    function($localStorage, $scope) {
-    }
-])
+.controller('MainCtrl', function($localStorage, $scope, $ionicSideMenuDelegate) {
+	console.log('main ctrl');
+
+	$scope.toggleLeft = function(){
+    	console.log('toggling menu');
+    	$ionicSideMenuDelegate.toggleLeft();
+    };
+})
+
+.controller('DashCtrl', function($localStorage, $scope, $ionicSideMenuDelegate) {
+
+console.log('dash ready');
+
+
+})
 
 .controller('FriendsCtrl', function($scope, Friends) {
   $scope.friends = Friends.all();

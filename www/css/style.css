@@ -2,6 +2,9 @@
 ion-nav-view{
 	background-color:#fff;
 }
+.tabs{
+	bottom:auto;
+}
 .align-center{ text-align: center; }
 .align-left{ text-align: left; }
 .align-right{ text-align: right; }

@@ -3,8 +3,8 @@
   Each tab's child <ion-nav-view> directive will have its own
   navigation history that also transitions its views in and out.
 -->
-<ion-tabs class="tabs-calm tabs-icon-only tabs-icon-top">
-
+<ion-tabs class="tabs-calm tabs-icon-only tabs-icon-top" ng-controller="MainCtrl">
+  <button class="button button-light button-icon icon ion-navicon" ng-click="toggleLeft()"></button>
 
   <!-- Dashboard Tab -->
   <ion-tab title="Dashboard" icon-on="ion-ios7-home" icon-off="ion-ios7-home-outline"  href="#/dash">
