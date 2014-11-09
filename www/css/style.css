@@ -38,3 +38,21 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
 #home .item-checkbox.item-icon-right .button.icon{
 	max-height:none;
 }
+.slider {
+  height: 100%;
+}
+.slider-slide {
+  padding-top: 50px;
+  color: #000;
+  background-color: #fff;
+  text-align: center;
+}
+.slider-slide:nth-child(odd){
+	/*background:#eee;*/
+}
+.slider-slide .small-header{
+	background:#eee;
+	padding: 5px 0;
+	color: #888;
+	text-shadow: 1px 1px 1px #fff;
+}

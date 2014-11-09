@@ -5,77 +5,45 @@
   <ion-side-menu-content ng-controller="DashCtrl">
 
 
-    <h1>Dashboard</h1>
+	<ion-slide-box on-slide-changed="slideHasChanged($index)">
+	  <ion-slide>
+	    <div class="box">
+	    	<div class="small-header">All Core Events</div>
+	    </div>
+	  </ion-slide>
 
-    <div class="row responsive-sm">
-    	<div class="col">
-	    	<div class="card align-center">
-			  <div class="item item-text-wrap">
-			    <a href="#/accounts" class="icon ion-person icon-huge"></a>
-			  </div>
-			  <div class="item item-divider">
-			    Accounts
-			  </div>
-			</div>
-    	</div>
-    	<div class="col">
-    		<div class="card align-center">
-			  <div class="item item-text-wrap">
-			    <a href="#/cores" class="icon ion-flash-off icon-huge"></a>
-			  </div>
-			  <div class="item item-divider">
-			    Spark Cores
-			  </div>
-			</div>
-    	</div>
-    </div>
+	  <ion-slide ng-repeat="core in cores">
+	    <div class="box">
+	    	<div class="small-header">{{core.name}}</div>
+	    </div>
+	  </ion-slide>
 
-    <div class="row responsive-sm">
-    	<div class="col">
-	    	<div class="card align-center">
-			  <div class="item item-text-wrap">
-			    <a href="#/data" class="icon ion-ios7-pulse-strong icon-huge"></a>
-			  </div>
-			  <div class="item item-divider">
-			    Data
-			  </div>
-			</div>
-    	</div>
-    	<div class="col">
-    		<div class="card align-center">
-			  <div class="item item-text-wrap">
-			    <a href="#/settings" class="icon ion-ios7-gear icon-huge"></a>
-			  </div>
-			  <div class="item item-divider">
-			    Settings
-			  </div>
-			</div>
-    	</div>
-    </div>
-
-    <div class="row responsive-sm">
-    	<div class="col-50">
-	    	<div class="card align-center">
-			  <div class="item item-text-wrap">
-			    <a href="#/dash/about" class="icon ion-android-information icon-huge"></a>
-			  </div>
-			  <div class="item item-divider">
-			    About
-			  </div>
-			</div>
-    	</div>
-    </div>
+	</ion-slide-box>
 
   </ion-side-menu-content>
 
 
 <!-- </ion-view> -->
   <ion-side-menu side="left">
-    <ul class="list">
-  	  <li class="item">Side menu 1</li>
-  	  <li class="item">Side menu 2</li>
-  	  <li class="item">Side menu 3</li>
-  	</ul>
+    <ion-header-bar class="bar-assertive">
+        <h1 class="title">Left Menu</h1>
+      </ion-header-bar>
+      <ion-content>
+        <div class="list">
+	  	  <a href="/#/accounts" class="item item-icon-left">
+	  	  	<i class="icon ion-ios7-person-outline"></i>
+	  	  	Accounts
+	  	  </a>
+	  	  <a href="/#/cores" class="item item-icon-left">
+	  	  	<i class="icon ion-ios7-bolt"></i>
+	  	  	Cores
+	  	  </a>
+	  	  <a href="/#/settings" class="item item-icon-left">
+	  	  	<i class="icon ion-ios7-gear"></i>
+	  	  	Settings
+	  	  </a>
+	  	</div>
+  	</ion-content>
   </ion-side-menu>
 
 </ion-side-menus>
