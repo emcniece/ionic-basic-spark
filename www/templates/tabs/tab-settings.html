@@ -1,5 +1,5 @@
-<ion-view title="App Settings" hide-nav-bar="true">
-  <ion-content class="padding" has-header="true">
+<ion-view title="App Settings">
+  <ion-content class="padding">
     <h1>Settings</h1>
 
 	<div class="list">
@@ -8,10 +8,19 @@
 			<input name="sparkApiUrl" type="text" ng-model="settings.sparkApiUrl" placeholder="https://api.spark.io/v1" ng-value="sparkApiUrl" value="https://api.spark.io/v1/">
 		</label>
 
+		<div class="item range range-positive">
+		<span class="input-label"># Data Saved: {{settings.maxDataLength}}</span>
+		    <i class="icon ion-battery-low"></i>
+		    <input type="range" ng-model="settings.maxDataLength" ng-value="maxDataLength" name="maxDataLength" min="0" max="100" value="33">
+		    <i class="icon ion-battery-half"></i>
+		</div>
+
 	</div>
 
-	<div class="paddings">
-      <button class="button button-block button-assertive" ng-click="clearAllData()">Clear All Data</button>
+	<div class="row">
+      <div class="col">
+      	<button class="button button-block button-assertive" ng-click="clearAllData()">Clear All Data</button>
+      </div>
     </div>
 
   </ion-content>
