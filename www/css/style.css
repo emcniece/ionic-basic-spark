@@ -5,10 +5,19 @@ ion-nav-view{
 .tabs{
 	bottom:auto;
 }
+.has-tabs, .bar-footer.has-tabs{
+	/*margin-top:47px;*/
+}
 .align-center{ text-align: center; }
 .align-left{ text-align: left; }
 .align-right{ text-align: right; }
-
+ion-tabs .tabs{
+	padding:0 40px;
+}
+ion-tabs .tabs > .ion-navicon{
+	position: absolute;
+	left:0;
+}
 .icon-huge{
 	font-size:40px;
 }
