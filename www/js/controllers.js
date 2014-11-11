@@ -9,13 +9,9 @@ angular.module('starter.controllers', ['ngStorage'])
     };
 })
 
-.controller('DashCtrl', function($localStorage, $scope, $ionicSideMenuDelegate, $ionicSlideBoxDelegate, Cores, IonFeats) {
+.controller('DashCtrl', function($localStorage, $scope, $ionicSideMenuDelegate, $ionicSlideBoxDelegate, Cores) {
 
 	$scope.cores = Cores.all();
-  //$scope.icons = IonFeats.icons();
-  //$scope.colors = IonFeats.colors();
-
-  console.log( IonFeats.icons() );
 
 	$scope.nextSlide = function() {
 		console.log('nextSlide');

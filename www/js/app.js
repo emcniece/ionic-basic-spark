@@ -44,15 +44,25 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
   $stateProvider
 
     // setup an abstract state for the tabs directive
-    .state('tab', {
-      url: "",
+    .state('main', {
+      url: "/main",
       abstract: true,
-      templateUrl: "templates/tabs.html"
+      templateUrl: "templates/menu.html"
+    })
+
+    .state('main.tabs', {
+      url: '/tab',
+      abstract: true,
+      views: {
+        'menu-content': {
+          templateUrl: "templates/tabs.html"
+        }
+      }
     })
 
     // Each tab has its own nav history stack:
 
-    .state('tab.dash', {
+    .state('main.tabs.dash', {
       url: '/dash',
       views: {
         'tab-dash': {
@@ -62,8 +72,8 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
       }
     })
 
-    .state('tab.about', {
-      url: '/dash/about',
+    .state('main.tabs.about', {
+      url: '/about',
       views: {
         'tab-dash': {
           templateUrl: 'templates/tabs/tab-about.html',
@@ -72,7 +82,7 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
       }
     })
 
-    .state('tab.accounts', {
+    .state('main.tabs.accounts', {
       url: '/accounts',
       views: {
         'tab-accounts': {
@@ -81,7 +91,7 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
         }
       }
     })
-    .state('tab.account-detail', {
+    .state('main.tabs.account-detail', {
       url: '/accounts/:id',
       views: {
         'tab-accounts': {
@@ -90,7 +100,7 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
         }
       }
     })
-    .state('tab.account-token', {
+    .state('main.tabs.account-token', {
       url: '/accounts/:id/tokens',
       views: {
         'tab-accounts': {
@@ -100,7 +110,7 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
       }
     })
 
-    .state('tab.cores', {
+    .state('main.tabs.cores', {
       url: '/cores',
       views: {
         'tab-cores': {
@@ -109,7 +119,7 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
         }
       }
     })
-    .state('tab.core-detail', {
+    .state('main.tabs.core-detail', {
       url: '/cores/:id',
       views: {
         'tab-cores': {
@@ -119,8 +129,8 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
       }
     })
 
-    .state('tab.data', {
-      url: '/data',
+    .state('main.tabs.listeners', {
+      url: '/listeners',
       views: {
         'tab-data': {
           templateUrl: 'templates/tabs/tab-data.html',
@@ -129,7 +139,7 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
       }
     })
 
-    .state('tab.settings', {
+    .state('main.tabs.settings', {
       url: '/settings',
       views: {
         'tab-settings': {
@@ -142,7 +152,7 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
     ; // $stateProvider
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/dash');
+  $urlRouterProvider.otherwise('/main/tab/dash');
 
 });
 

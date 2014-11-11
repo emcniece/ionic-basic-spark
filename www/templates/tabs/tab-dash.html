@@ -1,15 +1,15 @@
-<!-- <ion-view title="Ionic Basic Spark" hide-nav-bar="true">
-  <ion-content class="padding"> -->
-<ion-side-menus>
-  <!-- Center content -->
-  <ion-side-menu-content ng-controller="DashCtrl">
+<ion-view title="Spark Cores" hide-nav-bar="true">
 
+  <ion-header-bar class="bar-calm">
+    <h1 class="title">Dashboard</h1>
+  </ion-header-bar>
 
-	<ion-slide-box on-slide-changed="slideHasChanged($index)">
+  <ion-content>
+
+  <ion-slide-box on-slide-changed="slideHasChanged($index)">
 	  <ion-slide>
 	    <div class="box">
 	    	<div class="small-header">All Core Events</div>
-
 	    </div>
 	  </ion-slide>
 
@@ -21,30 +21,7 @@
 
 	</ion-slide-box>
 
-  </ion-side-menu-content>
 
 
-<!-- </ion-view> -->
-  <ion-side-menu side="left">
-    <ion-header-bar class="bar-assertive">
-        <h1 class="title">Left Menu</h1>
-      </ion-header-bar>
-      <ion-content>
-        <div class="list">
-	  	  <a href="/#/accounts" class="item item-icon-left">
-	  	  	<i class="icon ion-ios7-person-outline"></i>
-	  	  	Accounts
-	  	  </a>
-	  	  <a href="/#/cores" class="item item-icon-left">
-	  	  	<i class="icon ion-ios7-bolt"></i>
-	  	  	Cores
-	  	  </a>
-	  	  <a href="/#/settings" class="item item-icon-left">
-	  	  	<i class="icon ion-ios7-gear"></i>
-	  	  	Settings
-	  	  </a>
-	  	</div>
-  	</ion-content>
-  </ion-side-menu>
-
-</ion-side-menus>
+  </ion-content>
+</ion-view>
