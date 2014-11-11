@@ -1,0 +1,36 @@
+<ion-modal-view>
+  <ion-header-bar class="bar-royal">
+    <h1 class="title">Select Icon and Color</h1>
+    <button class="button icon ion-ios7-close-outline button-clear" ng-click="modal.hide()"></button>
+  </ion-header-bar>
+  <ion-content>
+
+    
+      <div class="list">
+
+	      <label class="item item-input item-select">
+  		    <div class="input-label">Select Color:</div>
+  		    <select ng-model="core.color">
+  		      <option value="" disabled selected>Color</option>
+            <option ng-repeat="color in colors" value="{{color}}">{{color}}</option>
+  		    </select>
+  		  </label>
+
+        <ion-scroll class="item" zooming="false" direction="x">
+          <button ng-click="setCoreIcon()" ng-repeat="icon in icons" value="{{icon}}" class="button icon {{icon}} button-{{core.color}}"></button>
+        </ion-scroll>
+
+      </div>
+
+      <div class="row">
+        <div class="col col-33 col-offset-67">
+          <button class="item button button-block button-balanced " ng-click="closeModal()">Done</button>
+        </div>
+      </div>
+
+
+  </ion-content>
+</ion-modal-view>
+
+
+

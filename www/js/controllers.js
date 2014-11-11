@@ -9,9 +9,14 @@ angular.module('starter.controllers', ['ngStorage'])
     };
 })
 
-.controller('DashCtrl', function($localStorage, $scope, $ionicSideMenuDelegate, $ionicSlideBoxDelegate, Cores) {
+.controller('DashCtrl', function($localStorage, $scope, $ionicSideMenuDelegate, $ionicSlideBoxDelegate, Cores, IonFeats) {
 
 	$scope.cores = Cores.all();
+  //$scope.icons = IonFeats.icons();
+  //$scope.colors = IonFeats.colors();
+
+  console.log( IonFeats.icons() );
+
 	$scope.nextSlide = function() {
 		console.log('nextSlide');
     	$ionicSlideBoxDelegate.next();
@@ -290,10 +295,33 @@ angular.module('starter.controllers', ['ngStorage'])
 
 })
 
-.controller('CoreDetailCtrl', function($scope, $ionicNavBarDelegate, $stateParams, Cores, Accounts) {
+.controller('CoreDetailCtrl', function($scope, $ionicNavBarDelegate, $ionicModal, $stateParams, Cores, Accounts, IonFeats) {
+
+  // Icon color select modal
+  $ionicModal.fromTemplateUrl('templates/modals/modal-core-iconcolor.html', {
+      scope: $scope,
+      animation: 'slide-in-up'
+    }).then(function(modal) {
+      $scope.modal = modal;
+  });
+
   $scope.core = Cores.get($stateParams.id);
   $scope.account = Accounts.getByToken($scope.core.acctToken);
 
+  $scope.icons = IonFeats.icons();
+  $scope.colors = IonFeats.colors();
+
+  $scope.openModal = function(){
+    $scope.modal.show();
+  };
+
+  $scope.closeModal = function(){
+    $scope.modal.hide();
+  };
+
+  $scope.setCoreIcon = function(){
+    $scope.core.icon = this.icon;
+  };
   $scope.goBack = function() {
     $ionicNavBarDelegate.back();
   };
@@ -321,7 +349,7 @@ angular.module('starter.controllers', ['ngStorage'])
 
 .controller('SettingsCtrl', function($localStorage, $scope, $ionicModal) {
 
-    $localStorage.testvar = "testing 123";
+    $scope.settings = $localStorage.settings;
 
     $scope.clearAllData = function(){
         if( confirm('Cannot undo - clear all app localstorage data?')){
