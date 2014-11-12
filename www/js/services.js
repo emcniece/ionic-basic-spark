@@ -148,6 +148,38 @@ angular.module('starter.services', [])
   };
 })
 
+/*=========================================
+=            Listeners Service            =
+=========================================*/
+
+.factory('Listeners', function($localStorage) {
+  return {
+    all: function() {
+      return $localStorage.listeners;
+    },
+    add: function(listener) {
+      console.log( '$lS Listeners :: Adding: ', listener);
+      $localStorage.listeners[listener.id] = listener;
+      return listener;
+    },
+    get: function(listenerId){
+      var get = $localStorage.listener[listenerId] || false;
+      console.log( '$lS Listeners :: Get: ', listenerId, get);
+
+      return get;
+    },
+    update: function(listener){
+      var merged = merge(listener, $localStorage.listeners[listener.id])
+
+      console.log( '$lS Listeners :: Update: ', listener, merged);
+      $localStorage.listeners[listener.id] = merged;
+    },
+    delete: function(listenerId){
+      delete $localStorage.listeners[listenerId];
+    }
+  };
+})
+
 .service('IonFeats', function($localStorage){
   return {
     icons: function(){

@@ -38,6 +38,16 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
 .list em{
 	font-style: italic;
 }
+.input-label{
+	font-size:15px;
+}
+.item p .badge,
+.item .badge-inline{
+	position: relative;
+	display: inline-block;
+	top:auto;
+	right:auto;
+}
 .modal .item{
 	margin:-1px 0;
 }
@@ -57,7 +67,6 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
   padding-top: 5px;
   color: #000;
   background-color: #fff;
-  text-align: center;
 }
 .slider-slide:nth-child(odd){
 	/*background:#eee;*/
@@ -67,4 +76,5 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
 	padding: 5px 0;
 	color: #888;
 	text-shadow: 1px 1px 1px #fff;
+	text-align: center;
 }

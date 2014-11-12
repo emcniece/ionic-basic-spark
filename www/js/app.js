@@ -25,6 +25,8 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
       'accounts': [],
       'cores': {},
       'sparkData': {},
+      'listeners': {},
+      'events': {},
       'settings': {
         sparkApiUrl: "https://api.spark.io/v1/"
       }
@@ -77,7 +79,7 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
       views: {
         'tab-dash': {
           templateUrl: 'templates/tabs/tab-about.html',
-          controller: 'DashCtrl'
+          controller: 'AboutCtrl'
         }
       }
     })
@@ -132,9 +134,9 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
     .state('main.tabs.listeners', {
       url: '/listeners',
       views: {
-        'tab-data': {
-          templateUrl: 'templates/tabs/tab-data.html',
-          //controller: 'DataCtrl'
+        'tab-listeners': {
+          templateUrl: 'templates/tabs/tab-listeners.html',
+          controller: 'ListenerCtrl'
         }
       }
     })

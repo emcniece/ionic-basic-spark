@@ -4,9 +4,9 @@ angular.module('starter.controllers', ['ngStorage'])
 	console.log('main ctrl');
 
 	$scope.toggleLeft = function(){
-    	console.log('toggling menu');
     	$ionicSideMenuDelegate.toggleLeft();
-    };
+  };
+
 })
 
 .controller('DashCtrl', function($localStorage, $scope, $ionicSideMenuDelegate, $ionicSlideBoxDelegate, Cores) {
@@ -21,8 +21,8 @@ angular.module('starter.controllers', ['ngStorage'])
 
 })
 
-.controller('FriendsCtrl', function($scope, Friends) {
-  $scope.friends = Friends.all();
+.controller('AboutCtrl', function($scope) {
+  // ho hum
 })
 
 .controller('FriendDetailCtrl', function($scope, $stateParams, Friends) {
@@ -234,6 +234,7 @@ angular.module('starter.controllers', ['ngStorage'])
 
     // Load or initialize projects
     $scope.cores = Cores.all();
+
 })
 
 .controller('AddCoreCtrl', function( $scope, $localStorage, $ionicModal, Accounts, Cores, SparkAPI) {
@@ -331,12 +332,82 @@ angular.module('starter.controllers', ['ngStorage'])
 })
 
 /*================================
-=            Data Tab            =
+=            Listeners Tab       =
 ================================*/
 
-.controller('DataCtrl', function($scope) {
-})
+.controller('ListenerCtrl', function($scope, $ionicModal, Listeners) {
+  $scope.listeners = Listeners.all();
 
+  $ionicModal.fromTemplateUrl('templates/modals/modal-add-listener.html', {
+      scope: $scope,
+      animation: 'slide-in-up'
+    }).then(function(modal) {
+      $scope.modal = modal;
+  });
+
+})
+/**
+ * Modal Popup box and a few button functions
+ */
+.controller('CreateListenerCtrl', function($scope, $localStorage, $ionicModal, Cores, Listeners) {
+
+    // Defaults
+    $scope.cores = Cores.all();
+    $scope.listener = {isJson: false, coreId: null, eventName: null, eventSource: null, events: [] };
+    $scope.testListenerActive = false;
+    $scope.error = false;
+
+    $scope.testListener = function(){
+
+      // Failsafe for multiple events
+      if( $scope.listener.eventSource){
+        $scope.listener.eventSource.close();
+        $scope.listener.events = [];
+      }
+
+      // Check if conditions are met
+      if( $scope.listener.coreId && $scope.listener.eventName){
+
+        var core = Cores.get($scope.listener.coreId),
+          listenerUrl = $localStorage.settings.sparkApiUrl
+            + 'devices/' + core.id + '/events?access_token='
+            + core.acctToken;
+
+        // Testing, 123...
+        $scope.listener.eventSource = new EventSource(listenerUrl);
+
+        // Open sesame
+        $scope.listener.eventSource.addEventListener('open', function(){
+          $scope.testListenerActive = true;
+          $scope.error = false;
+          $scope.$apply();
+        });
+
+        // ..."error" sesame?
+        $scope.listener.eventSource.addEventListener('error', function(e){
+          console.log('listener error: ', e);
+          $scope.testListenerActive = false;
+          $scope.error = "ES listener error.";
+        });
+
+        // ... BAM sesame errywhere
+        $scope.listener.eventSource.addEventListener($scope.listener.eventName, function(e){
+          var data = e.data;
+
+          // Attempt decode if isJson enabled
+          if($scope.listener.isJson) data = angular.fromJson(e.data) || e.data;
+
+          $scope.listener.events.push( data);
+          $scope.$apply();
+        });
+
+      } else{
+        $scope.error = "Fill out core and event name fields.";
+      }
+
+    }
+
+})
 
 
 /*====================================
@@ -346,6 +417,13 @@ angular.module('starter.controllers', ['ngStorage'])
 .controller('SettingsCtrl', function($localStorage, $scope, $ionicModal) {
 
     $scope.settings = $localStorage.settings;
+
+    $scope.clearEventData = function(){
+        if( confirm('Cannot undo - clear all core event data?')){
+            $localStorage.events = {};
+            console.log('cleared events', $localStorage);
+        }
+    };
 
     $scope.clearAllData = function(){
         if( confirm('Cannot undo - clear all app localstorage data?')){

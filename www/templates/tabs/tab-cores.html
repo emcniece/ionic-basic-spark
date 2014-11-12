@@ -14,17 +14,21 @@
 
     <ion-list>
       <ion-item ng-repeat="core in cores" type="item-text-wrap"  class="item-icon-left item-icon-right" href="#/main/tab/cores/{{core.id}}">
-      	<i ng-hide="core.connected" class="button button-clear icon ion-ios7-circle-outline"></i>
-      	<i ng-show="core.connected" class="button button-balanced button-clear icon ion-record"></i>
+      	<i class="icon {{core.icon}} {{core.color}}"></i>
 
         <h2>{{core.name}}</h2>
-        <p ng-show="core.last_heard"><em>Last heard at: {{core.last_heard}}</em></p>
+        <p>
+          <span ng-hide="core.connected" class="badge badge-dark">Offline</span>
+          <span ng-show="core.connected" class="badge badge-balanced">Online</span>
+
+          <em ng-show="core.last_heard">Last heard at: {{core.last_heard}}</em>
+        </p>
         <i class="icon ion-chevron-right"></i>
 
       </ion-item>
 
-      <li class="item item-icon-right" ng-click="modal.show()">
-        <p>Add new core...</p>
+      <li class="item item-button-right" ng-click="modal.show()">
+        Add new core...
         <button class="button icon-right icon ion-ios7-plus-empty button-clear"></button>
       </li>
 

@@ -10,7 +10,7 @@
 		</label>
 
 		<div class="item range range-positive">
-		<span class="input-label"># Data Saved: {{settings.maxDataLength}}</span>
+		<span class="input-label"># Events Saved: {{settings.maxDataLength}}</span>
 		    <i class="icon ion-battery-low"></i>
 		    <input type="range" ng-model="settings.maxDataLength" ng-value="maxDataLength" name="maxDataLength" min="0" max="100" value="33">
 		    <i class="icon ion-battery-half"></i>
@@ -19,6 +19,9 @@
 	</div>
 
 	<div class="row">
+      <div class="col">
+      	<button class="button button-block button-royal" ng-click="clearEventData()">Clear Event Data</button>
+      </div>
       <div class="col">
       	<button class="button button-block button-assertive" ng-click="clearAllData()">Clear All Data</button>
       </div>
