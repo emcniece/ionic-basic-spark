@@ -2,6 +2,15 @@
 ion-nav-view{
 	background-color:#fff;
 }
+
+/* Code print styles */
+pre {outline: 1px solid #ccc; padding: 5px; margin: 5px; }
+.string { color: green; }
+.number { color: darkorange; }
+.boolean { color: blue; }
+.null { color: magenta; }
+.key { color: red; }
+
 .tabs{
 	bottom:auto;
 }
@@ -77,4 +86,10 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
 	color: #888;
 	text-shadow: 1px 1px 1px #fff;
 	text-align: center;
+}
+ion-list.has-scroller .item{
+	padding:0;
+}
+ion-list.has-scroller .item ion-scroll.item{
+	padding:16px;
 }

@@ -335,8 +335,14 @@ angular.module('starter.controllers', ['ngStorage'])
 =            Listeners Tab       =
 ================================*/
 
-.controller('ListenerCtrl', function($scope, $ionicModal, Listeners) {
-  $scope.listeners = Listeners.all();
+.controller('ListenerCtrl', function($scope, $ionicModal, Listeners, Cores) {
+
+  var listeners = Listeners.all();
+  angular.forEach(listeners, function(lst){
+    lst.core = Cores.get(lst.coreId);
+  });
+
+  $scope.listeners = listeners;
 
   $ionicModal.fromTemplateUrl('templates/modals/modal-add-listener.html', {
       scope: $scope,
@@ -357,13 +363,27 @@ angular.module('starter.controllers', ['ngStorage'])
     $scope.testListenerActive = false;
     $scope.error = false;
 
+    $scope.coreChange = function(){
+      $scope.core = Cores.get($scope.listener.coreId);
+      $scope.resetListener();
+    };
+
+    $scope.resetListener = function(clearEvents){
+      if( $scope.listener.eventSource){
+        $scope.listener.eventSource.close();
+        console.log(clearEvents);
+        if( clearEvents){
+          $scope.listener.events = [];
+        }
+      }
+      $scope.error = false;
+      $scope.testListenerActive = false;
+    };
+
     $scope.testListener = function(){
 
       // Failsafe for multiple events
-      if( $scope.listener.eventSource){
-        $scope.listener.eventSource.close();
-        $scope.listener.events = [];
-      }
+      $scope.resetListener(true);
 
       // Check if conditions are met
       if( $scope.listener.coreId && $scope.listener.eventName){
@@ -395,7 +415,10 @@ angular.module('starter.controllers', ['ngStorage'])
           var data = e.data;
 
           // Attempt decode if isJson enabled
-          if($scope.listener.isJson) data = angular.fromJson(e.data) || e.data;
+          if($scope.listener.isJson){
+            data = angular.fromJson(e.data) || e.data;
+            //if(typeof(data) === 'object') data.html = syntaxHighlight(data);
+          }
 
           $scope.listener.events.push( data);
           $scope.$apply();
@@ -405,7 +428,16 @@ angular.module('starter.controllers', ['ngStorage'])
         $scope.error = "Fill out core and event name fields.";
       }
 
-    }
+    };
+
+    $scope.addListener = function(){
+      // Clear unwanted data
+      delete $scope.listener.events;
+      delete $scope.listener.eventSource;
+
+      Listeners.add($scope.listener);
+      $scope.modal.hide();
+    };
 
 })
 
