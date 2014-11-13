@@ -140,6 +140,15 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
         }
       }
     })
+    .state('main.tabs.listener-detail', {
+      url: '/listeners/:id',
+      views: {
+        'tab-listeners': {
+          templateUrl: 'templates/detail/listener-detail.html',
+          controller: 'ListenerDetailCtrl'
+        }
+      }
+    })
 
     .state('main.tabs.settings', {
       url: '/settings',

@@ -93,7 +93,7 @@ angular.module('starter.services', [])
       return account;
     },
     update: function(account){
-      var merged = merge(account, $localStorage.account[account.id])
+      var merged = merge(account, $localStorage.account[account.id]);
 
       console.log( '$lS Account :: Update: ', account, merged);
       $localStorage.accounts[account.id] = merged;
@@ -131,7 +131,7 @@ angular.module('starter.services', [])
       return get;
     },
     update: function(core){
-      var merged = merge(core, $localStorage.cores[core.id])
+      var merged = merge(core, $localStorage.cores[core.id]);
 
       console.log( '$lS Cores :: Update: ', core, merged);
       $localStorage.cores[core.id] = merged;
@@ -163,13 +163,13 @@ angular.module('starter.services', [])
       return listener;
     },
     get: function(listenerId){
-      var get = $localStorage.listener[listenerId] || false;
+      var get = $localStorage.listeners[listenerId] || false;
       console.log( '$lS Listeners :: Get: ', listenerId, get);
 
       return get;
     },
     update: function(listener){
-      var merged = merge(listener, $localStorage.listeners[listener.id])
+      var merged = merge(listener, $localStorage.listeners[listener.id]);
 
       console.log( '$lS Listeners :: Update: ', listener, merged);
       $localStorage.listeners[listener.id] = merged;

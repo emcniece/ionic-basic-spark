@@ -4,7 +4,7 @@ angular.module('starter.controllers', ['ngStorage'])
 	console.log('main ctrl');
 
 	$scope.toggleLeft = function(){
-    	$ionicSideMenuDelegate.toggleLeft();
+    $ionicSideMenuDelegate.toggleLeft();
   };
 
 })
@@ -15,8 +15,8 @@ angular.module('starter.controllers', ['ngStorage'])
 
 	$scope.nextSlide = function() {
 		console.log('nextSlide');
-    	$ionicSlideBoxDelegate.next();
-  	}
+    $ionicSlideBoxDelegate.next();
+  };
 
 
 })
@@ -149,7 +149,7 @@ angular.module('starter.controllers', ['ngStorage'])
 
             Accounts.add(newAcct);
             $scope.accounts = Accounts.all();
-            $scope.createAccount.$setPristine;
+            $scope.createAccount.$setPristine();
             $scope.modal.hide();
         } else{
           $scope.user.checkok.okmsg = false;
@@ -230,7 +230,7 @@ angular.module('starter.controllers', ['ngStorage'])
     $scope.loadingDone = function(){
       $scope.$broadcast('scroll.refreshComplete');
       $timeout(function(){ $scope.$apply(); });
-    }
+    };
 
     // Load or initialize projects
     $scope.cores = Cores.all();
@@ -341,7 +341,7 @@ angular.module('starter.controllers', ['ngStorage'])
   angular.forEach(listeners, function(lst){
     lst.core = Cores.get(lst.coreId);
   });
-
+  console.log(listeners);
   $scope.listeners = listeners;
 
   $ionicModal.fromTemplateUrl('templates/modals/modal-add-listener.html', {
@@ -371,7 +371,6 @@ angular.module('starter.controllers', ['ngStorage'])
     $scope.resetListener = function(clearEvents){
       if( $scope.listener.eventSource){
         $scope.listener.eventSource.close();
-        console.log(clearEvents);
         if( clearEvents){
           $scope.listener.events = [];
         }
@@ -389,9 +388,9 @@ angular.module('starter.controllers', ['ngStorage'])
       if( $scope.listener.coreId && $scope.listener.eventName){
 
         var core = Cores.get($scope.listener.coreId),
-          listenerUrl = $localStorage.settings.sparkApiUrl
-            + 'devices/' + core.id + '/events?access_token='
-            + core.acctToken;
+          listenerUrl = $localStorage.settings.sparkApiUrl +
+            'devices/' + core.id + '/events?access_token=' +
+            core.acctToken;
 
         // Testing, 123...
         $scope.listener.eventSource = new EventSource(listenerUrl);
@@ -432,12 +431,28 @@ angular.module('starter.controllers', ['ngStorage'])
 
     $scope.addListener = function(){
       // Clear unwanted data
+      $scope.resetListener(true);
+      delete $scope.listener.core;
       delete $scope.listener.events;
       delete $scope.listener.eventSource;
 
+      var listId = $scope.listener.coreId +'_'+ $scope.listener.eventName.replace(/\s+/g, '-').toLowerCase();
+      $scope.listener.id = listId;
       Listeners.add($scope.listener);
       $scope.modal.hide();
     };
+
+})
+
+.controller('ListenerDetailCtrl', function($scope, $stateParams, $ionicNavBarDelegate, Listeners) {
+
+  $scope.listener = Listeners.get($stateParams.id);
+
+  $scope.deleteListener = function(listId){
+    if(typeof(listId) === 'undefined') listId = $scope.listener.id;
+    $ionicNavBarDelegate.back();
+    Listeners.delete(listId);
+  };
 
 })
 

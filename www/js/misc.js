@@ -16,7 +16,8 @@ Object.size = function(obj) {
 appendToObj = function(obj){
 
     // maybe we should make this
-}
+    return null;
+};
 
 /*=========================================
 =            Get Object By Key            =
@@ -28,10 +29,10 @@ getObjByKey = function(key, value, object){
         if( objValue[key] == value){
             out = objValue;
         }
-    })
+    });
 
     return out;
-}
+};
 
 
 /*=====================================
