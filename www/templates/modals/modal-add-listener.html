@@ -1,0 +1,73 @@
+  <ion-modal-view>
+    <ion-header-bar class="bar-royal">
+      <h1 class="title">Add New Listener</h1>
+      <button class="button icon ion-ios7-close-outline button-clear" ng-click="modal.hide()"></button>
+    </ion-header-bar>
+    <ion-content>
+
+      <form name="createListener" ng-controller="CreateListenerCtrl">
+	      <div class="list">
+
+          <label class="item item-input item-select">
+            <div class="input-label">Select Core: <i class="icon {{core.icon}} {{core.color}}"></i></div>
+            <select ng-change="coreChange()" ng-model="listener.coreId">
+              <option value="" disabled selected>Core</option>
+              <option ng-repeat="core in cores" value="{{core.id}}">{{core.name}}</option>
+            </select>
+          </label>
+
+    			<label class="item item-input">
+    			  <span class="input-label">Spark.publish() event name</span>
+    			  <input name="eventName" type="text" ng-model="listener.eventName" placeholder="myPublishEventName" ng-value="eventName">
+    			</label>
+
+          <ion-toggle
+            ng-model="listener.isJson"
+            toggle-class="toggle-calm">Is JSON?</ion-toggle>
+
+  		  </div>
+
+        <div class="padding ajax-messages">
+          <button class="button button-block button-assertive button-clear ng-hide" ng-show="user.checkok.okmsg == false">Error: {{user.checkok.errormsg}}</button>
+        </div>
+
+        <div class="padding align-center">
+          <p>If you know that your event returns a JSON object, check the box above. This will have future applications!</p>
+          <p>To ensure your event is being detected, set details above and hit the "Test Listener" button for a trial run.</p>
+        </div>
+
+		    <div class="padding row">
+
+          <div class="col">
+            <button type="button" class="button button-block button-energized" ng-click="testListener()" ng-hide="testListenerActive">Test Listener</button>
+            <button type="button" class="button button-block button-assertive" ng-click="resetListener(false)" ng-show="testListenerActive">Stop Test</button>
+          </div>
+
+          <div class="col">
+            <button type="submit" class="button button-block button-balanced" ng-click="addListener()">Add Listener</button>
+          </div>
+
+	      </div>
+
+        <div class="test-listener padding">
+          <p ng-show="testListenerActive" >Waiting for event &quot;{{listener.eventName}}&quot; <span class="icon ion-loading-c"></span></p>
+
+          <ion-list class="has-scroller">
+            <ion-item ng-repeat="event in listener.events">
+              <ion-scroll class="item" zooming="false" direction="x">
+                {{event}}
+              </ion-scroll>
+            </ion-item>
+          </ion-list>
+
+        </div>
+
+        <button class="button button-assertive button-clear button-block" ng-show="error">Error: {{error}}</button>
+
+  	  </form>
+
+    </ion-content>
+  </ion-modal-view>
+
+
+

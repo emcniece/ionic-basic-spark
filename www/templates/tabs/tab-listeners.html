@@ -1,0 +1,20 @@
+<ion-view title="Listeners" hide-nav-bar="true">
+  <ion-header-bar><!-- kept as spacer --></ion-header-bar>
+  <ion-content has-header="true">
+
+    <ion-list>
+      <ion-item ng-repeat="listener in listeners" type="item-text-wrap"  class="item-icon-left item-icon-right" href="#/main/tab/listeners/{{listener.id}}">
+      <i class="icon {{listener.core.icon}} {{listener.core.color}}"></i>
+        <h2>{{listener.core.name}} : {{listener.eventName}}</h2>
+        <i class="icon ion-chevron-right"></i>
+      </ion-item>
+
+      <li class="item item-button-right" ng-click="modal.show()">
+        Add new listener...
+        <button class="button icon-right icon ion-ios7-plus-empty button-clear"></button>
+      </li>
+
+    </ion-list>
+
+  </ion-content>
+</ion-view>
