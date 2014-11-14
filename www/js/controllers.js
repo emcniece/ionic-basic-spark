@@ -1,7 +1,8 @@
 angular.module('starter.controllers', ['ngStorage'])
 
-.controller('MainCtrl', function($localStorage, $scope, $ionicSideMenuDelegate) {
+.controller('MainCtrl', function($localStorage, $scope, $ionicSideMenuDelegate, Listeners) {
 	console.log('main ctrl');
+  console.log( Listeners.all() );
 
 	$scope.toggleLeft = function(){
     $ionicSideMenuDelegate.toggleLeft();
@@ -276,6 +277,9 @@ angular.module('starter.controllers', ['ngStorage'])
     $scope.addSelectedCores = function(){
 
       // Compile selected cores
+      // Bug: figure out why newly added cores don't have accounts with them
+      // console.log( $scope.acount.id, Accounts.get($scope.account.id) )
+
       var acctToken = Accounts.get($scope.account.id).token.token;
       var selectedCores = [];
       angular.forEach($scope.accountCores, function(core){
@@ -358,89 +362,92 @@ angular.module('starter.controllers', ['ngStorage'])
 .controller('CreateListenerCtrl', function($scope, $localStorage, $ionicModal, Cores, Listeners) {
 
     // Defaults
-    $scope.cores = Cores.all();
-    $scope.listener = {isJson: false, coreId: null, eventName: null, eventSource: null, events: [] };
-    $scope.testListenerActive = false;
+    // Bug: figure out why newly added listeners don't have cores associated with them
+    // console.log( $scope.cores);
+
+  $scope.cores = Cores.all();
+  $scope.listener = {isJson: false, coreId: null, eventName: null, eventSource: null, events: [] };
+  $scope.testListenerActive = false;
+  $scope.error = false;
+
+  $scope.coreChange = function(){
+    $scope.core = Cores.get($scope.listener.coreId);
+    $scope.resetListener();
+  };
+
+  $scope.resetListener = function(clearEvents){
+    if( $scope.listener.eventSource){
+      $scope.listener.eventSource.close();
+      if( clearEvents){
+        $scope.listener.events = [];
+      }
+    }
     $scope.error = false;
+    $scope.testListenerActive = false;
+  };
 
-    $scope.coreChange = function(){
-      $scope.core = Cores.get($scope.listener.coreId);
-      $scope.resetListener();
-    };
+  $scope.testListener = function(){
 
-    $scope.resetListener = function(clearEvents){
-      if( $scope.listener.eventSource){
-        $scope.listener.eventSource.close();
-        if( clearEvents){
-          $scope.listener.events = [];
+    // Failsafe for multiple events
+    $scope.resetListener(true);
+
+    // Check if conditions are met
+    if( $scope.listener.coreId && $scope.listener.eventName){
+
+      var core = Cores.get($scope.listener.coreId),
+        listenerUrl = $localStorage.settings.sparkApiUrl +
+          'devices/' + core.id + '/events?access_token=' +
+          core.acctToken;
+
+      // Testing, 123...
+      $scope.listener.eventSource = new EventSource(listenerUrl);
+
+      // Open sesame
+      $scope.listener.eventSource.addEventListener('open', function(){
+        $scope.testListenerActive = true;
+        $scope.error = false;
+        $scope.$apply();
+      });
+
+      // ..."error" sesame?
+      $scope.listener.eventSource.addEventListener('error', function(e){
+        console.log('listener error: ', e);
+        $scope.testListenerActive = false;
+        $scope.error = "ES listener error.";
+      });
+
+      // ... BAM sesame errywhere
+      $scope.listener.eventSource.addEventListener($scope.listener.eventName, function(e){
+        var data = e.data;
+
+        // Attempt decode if isJson enabled
+        if($scope.listener.isJson){
+          data = angular.fromJson(e.data) || e.data;
+          //if(typeof(data) === 'object') data.html = syntaxHighlight(data);
         }
-      }
-      $scope.error = false;
-      $scope.testListenerActive = false;
-    };
 
-    $scope.testListener = function(){
+        $scope.listener.events.push( data);
+        $scope.$apply();
+      });
 
-      // Failsafe for multiple events
-      $scope.resetListener(true);
+    } else{
+      $scope.error = "Fill out core and event name fields.";
+    }
 
-      // Check if conditions are met
-      if( $scope.listener.coreId && $scope.listener.eventName){
+  };
 
-        var core = Cores.get($scope.listener.coreId),
-          listenerUrl = $localStorage.settings.sparkApiUrl +
-            'devices/' + core.id + '/events?access_token=' +
-            core.acctToken;
+  $scope.addListener = function(){
+    // Clear unwanted data
+    $scope.resetListener(true);
+    delete $scope.listener.core;
+    delete $scope.listener.events;
+    delete $scope.listener.eventSource;
 
-        // Testing, 123...
-        $scope.listener.eventSource = new EventSource(listenerUrl);
-
-        // Open sesame
-        $scope.listener.eventSource.addEventListener('open', function(){
-          $scope.testListenerActive = true;
-          $scope.error = false;
-          $scope.$apply();
-        });
-
-        // ..."error" sesame?
-        $scope.listener.eventSource.addEventListener('error', function(e){
-          console.log('listener error: ', e);
-          $scope.testListenerActive = false;
-          $scope.error = "ES listener error.";
-        });
-
-        // ... BAM sesame errywhere
-        $scope.listener.eventSource.addEventListener($scope.listener.eventName, function(e){
-          var data = e.data;
-
-          // Attempt decode if isJson enabled
-          if($scope.listener.isJson){
-            data = angular.fromJson(e.data) || e.data;
-            //if(typeof(data) === 'object') data.html = syntaxHighlight(data);
-          }
-
-          $scope.listener.events.push( data);
-          $scope.$apply();
-        });
-
-      } else{
-        $scope.error = "Fill out core and event name fields.";
-      }
-
-    };
-
-    $scope.addListener = function(){
-      // Clear unwanted data
-      $scope.resetListener(true);
-      delete $scope.listener.core;
-      delete $scope.listener.events;
-      delete $scope.listener.eventSource;
-
-      var listId = $scope.listener.coreId +'_'+ $scope.listener.eventName.replace(/\s+/g, '-').toLowerCase();
-      $scope.listener.id = listId;
-      Listeners.add($scope.listener);
-      $scope.modal.hide();
-    };
+    var listId = $scope.listener.coreId +'_'+ $scope.listener.eventName.replace(/\s+/g, '-').toLowerCase();
+    $scope.listener.id = listId;
+    Listeners.add($scope.listener);
+    $scope.modal.hide();
+  };
 
 })
 

@@ -11,7 +11,7 @@
           <label class="item item-input item-select">
             <div class="input-label">Select Core: <i class="icon {{core.icon}} {{core.color}}"></i></div>
             <select ng-change="coreChange()" ng-model="listener.coreId">
-              <option value="" disabled selected>Core</option>
+              <option disabled selected>Core</option>
               <option ng-repeat="core in cores" value="{{core.id}}">{{core.name}}</option>
             </select>
           </label>
