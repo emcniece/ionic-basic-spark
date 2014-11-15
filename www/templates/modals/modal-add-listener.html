@@ -20,15 +20,20 @@
             <div class="input-label">Listener Type:</div>
             <select ng-change="lstTypeChange()" ng-model="listener.listenerType">
               <option selected="selected" value="publishEvent">Publish Event</option>
-              <option value="function">Function</option>
               <option value="variable">Variable</option>
+              <option value="function">Function</option>
             </select>
           </label>
 
-    			<label class="item item-input" ng-show="listener.listenerType == 'publishEvent'">
+    			<label class="item item-input">
     			  <span class="input-label">Spark.publish() event name</span>
     			  <input name="listenerName" type="text" ng-model="listener.listenerName" placeholder="mylistenerName" ng-value="listenerName">
     			</label>
+
+          <label class="item item-input" ng-show="listener.listenerType == 'function'">
+            <span class="input-label">Function data to send</span>
+            <input name="fnData" type="text" ng-model="listener.fnData" placeholder="aVariable" ng-value="fnData">
+          </label>
 
           <ion-toggle
             ng-model="listener.isJson"
@@ -59,7 +64,7 @@
 	      </div>
 
         <div class="test-listener padding">
-          <p ng-show="testListenerActive" >Waiting for event &quot;{{listener.eventName}}&quot; <span class="icon ion-loading-c"></span></p>
+          <p ng-show="testListenerActive" >Waiting for event &quot;{{listener.listenerName}}&quot; <span class="icon ion-loading-c"></span></p>
 
           <ion-list class="has-scroller">
             <ion-item ng-repeat="event in listener.events">

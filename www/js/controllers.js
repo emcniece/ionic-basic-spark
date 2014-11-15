@@ -376,6 +376,7 @@ angular.module('starter.controllers', ['ngStorage'])
     events: [],
     listenerType: 'publishEvent', // function, variable
     active: true,
+    fnData: false
   }; // listener proto
 
   $scope.testListenerActive = false;
@@ -454,7 +455,7 @@ angular.module('starter.controllers', ['ngStorage'])
     delete $scope.listener.events;
     delete $scope.listener.eventSource;
 
-    var listId = $scope.listener.coreId +'_'+ $scope.listener.eventName.replace(/\s+/g, '-').toLowerCase();
+    var listId = $scope.listener.coreId +'_'+ $scope.listener.listenerName.replace(/\s+/g, '-').toLowerCase();
     $scope.listener.id = listId;
     Listeners.add($scope.listener);
     $scope.modal.hide();
