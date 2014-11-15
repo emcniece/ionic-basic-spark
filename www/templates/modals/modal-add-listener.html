@@ -16,9 +16,18 @@
             </select>
           </label>
 
-    			<label class="item item-input">
+          <label class="item item-input item-select">
+            <div class="input-label">Listener Type:</div>
+            <select ng-change="lstTypeChange()" ng-model="listener.listenerType">
+              <option selected="selected" value="publishEvent">Publish Event</option>
+              <option value="function">Function</option>
+              <option value="variable">Variable</option>
+            </select>
+          </label>
+
+    			<label class="item item-input" ng-show="listener.listenerType == 'publishEvent'">
     			  <span class="input-label">Spark.publish() event name</span>
-    			  <input name="eventName" type="text" ng-model="listener.eventName" placeholder="myPublishEventName" ng-value="eventName">
+    			  <input name="listenerName" type="text" ng-model="listener.listenerName" placeholder="mylistenerName" ng-value="listenerName">
     			</label>
 
           <ion-toggle

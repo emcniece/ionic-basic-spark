@@ -2,7 +2,6 @@ angular.module('starter.controllers', ['ngStorage'])
 
 .controller('MainCtrl', function($localStorage, $scope, $ionicSideMenuDelegate, Listeners) {
 	console.log('main ctrl');
-  console.log( Listeners.all() );
 
 	$scope.toggleLeft = function(){
     $ionicSideMenuDelegate.toggleLeft();
@@ -10,9 +9,13 @@ angular.module('starter.controllers', ['ngStorage'])
 
 })
 
-.controller('DashCtrl', function($localStorage, $scope, $ionicSideMenuDelegate, $ionicSlideBoxDelegate, Cores) {
+.controller('DashCtrl', function($localStorage, $scope, $ionicSideMenuDelegate, $ionicSlideBoxDelegate, Cores, Listeners) {
 
 	$scope.cores = Cores.all();
+  var totalList = 0;
+  angular.forEach(Listeners.all(), function(listener){
+    console.log(listener)
+  });
 
 	$scope.nextSlide = function() {
 		console.log('nextSlide');
@@ -345,7 +348,6 @@ angular.module('starter.controllers', ['ngStorage'])
   angular.forEach(listeners, function(lst){
     lst.core = Cores.get(lst.coreId);
   });
-  console.log(listeners);
   $scope.listeners = listeners;
 
   $ionicModal.fromTemplateUrl('templates/modals/modal-add-listener.html', {
@@ -366,7 +368,16 @@ angular.module('starter.controllers', ['ngStorage'])
     // console.log( $scope.cores);
 
   $scope.cores = Cores.all();
-  $scope.listener = {isJson: false, coreId: null, eventName: null, eventSource: null, events: [] };
+  $scope.listener = {
+    isJson: false,
+    coreId: null,
+    listenerName: null,
+    eventSource: null,
+    events: [],
+    listenerType: 'publishEvent', // function, variable
+    active: true,
+  }; // listener proto
+
   $scope.testListenerActive = false;
   $scope.error = false;
 
@@ -392,7 +403,7 @@ angular.module('starter.controllers', ['ngStorage'])
     $scope.resetListener(true);
 
     // Check if conditions are met
-    if( $scope.listener.coreId && $scope.listener.eventName){
+    if( $scope.listener.coreId && $scope.listener.listenerName){
 
       var core = Cores.get($scope.listener.coreId),
         listenerUrl = $localStorage.settings.sparkApiUrl +
@@ -417,7 +428,7 @@ angular.module('starter.controllers', ['ngStorage'])
       });
 
       // ... BAM sesame errywhere
-      $scope.listener.eventSource.addEventListener($scope.listener.eventName, function(e){
+      $scope.listener.eventSource.addEventListener($scope.listener.listenerName, function(e){
         var data = e.data;
 
         // Attempt decode if isJson enabled
