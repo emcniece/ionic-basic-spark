@@ -324,7 +324,6 @@ angular.module('starter.services', [])
       console.log( '$lS Events :: Adding: ', event);
       $localStorage.events.unshift(event);
 
-      console.log($localStorage.events.length);
       var maxLen = $localStorage.settings.maxDataLength - 1;
       if( $localStorage.events.length > maxLen){
         $localStorage.events = $localStorage.events.slice(0, maxLen);
