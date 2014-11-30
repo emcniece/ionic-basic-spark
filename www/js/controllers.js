@@ -1,8 +1,8 @@
 angular.module('starter.controllers', ['ngStorage'])
 
 .controller('MainCtrl', function($localStorage, $scope, $ionicSideMenuDelegate, Listeners) {
-	console.log('main ctrl');
 
+  // Start up events
   initListeners(true);
 
   $scope.$on('listeners-updated', function(){
