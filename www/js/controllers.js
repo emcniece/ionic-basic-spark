@@ -3,19 +3,41 @@ angular.module('starter.controllers', ['ngStorage'])
 .controller('MainCtrl', function($localStorage, $scope, $ionicSideMenuDelegate, Listeners) {
 	console.log('main ctrl');
 
+  initListeners(true);
+
+  $scope.$on('listeners-updated', function(){
+    initListeners();
+  });
+
+  function initListeners(firstRun){
+    // Set up listeners
+    $scope.listeners = Listeners.all();
+
+    angular.forEach($scope.listeners, function(listener){
+      if(firstRun) listener.active = false;
+
+      if(listener.enabled && (firstRun || listener.active) ){
+        Listeners.start(listener);
+      }
+    });
+
+  }
+
 	$scope.toggleLeft = function(){
     $ionicSideMenuDelegate.toggleLeft();
   };
 
 })
 
-.controller('DashCtrl', function($localStorage, $scope, $ionicSideMenuDelegate, $ionicSlideBoxDelegate, $ionicPopover, Cores, Listeners) {
+.controller('DashCtrl', function($localStorage, $scope, $ionicSideMenuDelegate, $ionicSlideBoxDelegate, $ionicPopover, Cores, Listeners, Events) {
 
 	$scope.cores = Cores.all();
+  $scope.events = Events.all();
 
   var totalList = 0;
   $scope.listeners = Listeners.all();
   $scope.numLst = Object.size($scope.listeners);
+  $scope.num
 
   // used for individual popups
   $scope.activeCore = false;
@@ -27,9 +49,10 @@ angular.module('starter.controllers', ['ngStorage'])
     core.numLst = core.listeners.length;
   });
 
-  // Set up listeners
-  angular.forEach($scope.listeners, function(listener){
-    console.log(listener)
+  // Update lists
+  $scope.$on('events-updated', function(e, args){
+    $scope.events = Events.all();
+    $ionicSlideBoxDelegate.update();
   });
 
 	$scope.nextSlide = function() {
@@ -61,6 +84,10 @@ angular.module('starter.controllers', ['ngStorage'])
   $scope.$on('$destroy', function() {
     $scope.popover.remove();
   });
+
+  $scope.deleteData = function(){
+    Events.delete();
+  }
 
 })
 
@@ -124,7 +151,7 @@ angular.module('starter.controllers', ['ngStorage'])
 .controller('CreateAcctCtrl', function($scope, $localStorage, $ionicModal, Accounts, SparkAPI) {
 
     // Defaults
-    $scope.user = {email: "", pass: "", auth: "", valid: 0, checkok: {ok: false, errormsg:""}, token: {} };
+    $scope.user = Accounts.proto();
 
     // Checks API for account validity, returns tokens and sets latest active
     $scope.checkAcct = function(){
@@ -381,7 +408,7 @@ angular.module('starter.controllers', ['ngStorage'])
 =            Listeners Tab       =
 ================================*/
 
-.controller('ListenerCtrl', function($scope, $ionicModal, Listeners, Cores) {
+.controller('ListenerCtrl', function($scope, $ionicNavBarDelegate, $ionicModal, Listeners, Cores) {
 
   var listeners = Listeners.all();
   angular.forEach(listeners, function(lst){
@@ -407,16 +434,7 @@ angular.module('starter.controllers', ['ngStorage'])
     // console.log( $scope.cores);
 
   $scope.cores = Cores.all();
-  $scope.listener = {
-    isJson: false,
-    coreId: null,
-    listenerName: null,
-    eventSource: null,
-    events: [],
-    listenerType: 'publishEvent', // function, variable
-    active: true,
-    fnData: false
-  }; // listener proto
+  $scope.listener = Listeners.proto();
 
   $scope.testListenerActive = false;
   $scope.error = false;
@@ -488,29 +506,46 @@ angular.module('starter.controllers', ['ngStorage'])
   };
 
   $scope.addListener = function(){
+
     // Clear unwanted data
     $scope.resetListener(true);
-    delete $scope.listener.core;
     delete $scope.listener.events;
-    delete $scope.listener.eventSource;
 
+    // Re-assign needed data
     var listId = $scope.listener.coreId +'_'+ $scope.listener.listenerName.replace(/\s+/g, '-').toLowerCase();
+    $scope.listener.core = $scope.core;
     $scope.listener.id = listId;
-    Listeners.add($scope.listener);
+    $scope.listener.enabled = true;
+    //$scope.listener.active = true;
+    Listeners.add( $scope.listener);
     $scope.modal.hide();
   };
 
 })
 
-.controller('ListenerDetailCtrl', function($scope, $stateParams, $ionicNavBarDelegate, Listeners) {
+.controller('ListenerDetailCtrl', function($rootScope, $scope, $state, $stateParams, $ionicNavBarDelegate, Listeners) {
 
   $scope.listener = Listeners.get($stateParams.id);
 
-  $scope.deleteListener = function(listId){
-    if(typeof(listId) === 'undefined') listId = $scope.listener.id;
+  $scope.updateListener = function(){
+
+    if( $scope.listener.active){
+      $scope.listener.active = false;
+      $scope.listener.eventSource.close();
+    } else{
+      Listeners.start($scope.listener);
+      $rootScope.$broadcast('listeners-updated');
+    }
+  }
+
+  $scope.deleteListener = function(){
+    Listeners.delete($scope.listener.id);
     $ionicNavBarDelegate.back();
-    Listeners.delete(listId);
   };
+
+  $scope.goBack = function(){
+    $state.go('main.tabs.listeners');
+  }
 
 })
 
@@ -525,7 +560,7 @@ angular.module('starter.controllers', ['ngStorage'])
 
     $scope.clearEventData = function(){
         if( confirm('Cannot undo - clear all core event data?')){
-            $localStorage.events = {};
+            $localStorage.events = [];
             console.log('cleared events', $localStorage);
         }
     };

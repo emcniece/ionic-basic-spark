@@ -59,6 +59,19 @@ angular.module('starter.services', [])
 
 .factory('Accounts', function($localStorage) {
   return {
+    proto: function(){
+      return {
+        email: "",
+        pass: "",
+        auth: "",
+        valid: 0,
+        checkok: {
+          ok: false,
+          errormsg:""
+        },
+        token: {}
+      };
+    },
     all: function() {
       //var accountString = $localStorage.accounts;
       //console.log(accountString, angular.fromJson(accountString) );
@@ -116,6 +129,10 @@ angular.module('starter.services', [])
 
 .factory('Cores', function($localStorage) {
   return {
+    proto: function(){
+      // Core prototype determined by AJAX fetch
+      return null;
+    },
     all: function() {
       return $localStorage.cores;
     },
@@ -152,9 +169,23 @@ angular.module('starter.services', [])
 =            Listeners Service            =
 =========================================*/
 
-.factory('Listeners', function($localStorage, Cores) {
+.factory('Listeners', function($rootScope, $localStorage, Cores, Events) {
   return {
+    proto: function(){
+      return {
+        enabled: true,
+        active: false,
+        isJson: false,
+        coreId: null,
+        listenerName: null,
+        eventSource: null,
+        events: [],
+        listenerType: 'publishEvent', // function, variable
+        fnData: false
+      };
+    },
     all: function() {
+      //console.log( '$lS Listeners :: Get: ', $localStorage.listeners);
       return $localStorage.listeners;
     },
     add: function(listener) {
@@ -196,6 +227,67 @@ angular.module('starter.services', [])
       console.log( '$lS Listeners :: Update: ', listener, merged);
       $localStorage.listeners[listener.id] = merged;
     },
+    start: function(listener){
+      // Check if conditions are met
+      if( listener.coreId && listener.listenerName && !listener.active){
+        listener.active = true;
+
+        var core = Cores.get(listener.coreId),
+          listenerUrl = $localStorage.settings.sparkApiUrl +
+            'devices/' + core.id + '/events?access_token=' +
+            core.acctToken;
+
+        // Testing, 123...
+        listener.eventSource = new EventSource(listenerUrl);
+
+        // Open sesame
+        listener.eventSource.addEventListener('open', function(){
+          //testListenerActive = true;
+          //error = false;
+          //$apply();
+        });
+
+        // ..."error" sesame?
+        listener.eventSource.addEventListener('error', function(e){
+          console.log('listener error: ', e);
+          //$scope.testListenerActive = false;
+          //$scope.error = "ES listener error.";
+        });
+
+        // ... BAM sesame errywhere
+        listener.eventSource.addEventListener(listener.listenerName, function(e){
+          var data = e.data;
+
+          // Attempt decode if isJson enabled
+          if(listener.isJson){
+            data = angular.fromJson(e.data) || e.data;
+            //if(typeof(data) === 'object') data.html = syntaxHighlight(data);
+          }
+
+          //listener.events.push( data);
+          Events.add({
+            core: {
+              id: listener.coreId,
+              icon: listener.core.icon,
+              color: listener.core.color
+            },
+            listener: {
+              id: listener.id,
+              listenerName: listener.listenerName
+            },
+            data: data,
+            event: e
+          });
+
+          //$apply();
+          $rootScope.$broadcast('listeners-updated');
+        });
+
+        return true;
+      } else{
+        return "Fill out core and event name fields.";
+      }
+    },
     delete: function(listenerId){
       delete $localStorage.listeners[listenerId];
     }
@@ -205,14 +297,40 @@ angular.module('starter.services', [])
 /*======================================
 =            Events Service            =
 ======================================*/
-.factory('Events', function($localStorage, Cores, Listeners) {
+.factory('Events', function($rootScope, $localStorage, Cores) {
   return {
+    proto: function(){
+      return {
+        core: {
+          id: "",
+          icon: "",
+          color: ""
+        },
+        listener: {
+          id: "",
+          listenerName: ""
+        },
+        data: null,
+        timeStamp: null
+      };
+    },
     all: function() {
       return $localStorage.events;
     },
     add: function(event) {
+      if( typeof(event.id) === 'undefined')
+        event.id = event.listener.id + '_'+event.event.timeStamp;
+
       console.log( '$lS Events :: Adding: ', event);
-      $localStorage.event[event.id] = event;
+      $localStorage.events.unshift(event);
+
+      console.log($localStorage.events.length);
+      var maxLen = $localStorage.settings.maxDataLength - 1;
+      if( $localStorage.events.length > maxLen){
+        $localStorage.events = $localStorage.events.slice(0, maxLen);
+      }
+
+      $rootScope.$broadcast('events-updated');
       return event;
     },
     get: function(eventId){
@@ -234,18 +352,13 @@ angular.module('starter.services', [])
       }); // getByCore
 
       return lst;
-    }
-    /*
-    update: function(listener){
-      var merged = merge(listener, $localStorage.listeners[listener.id]);
-
-      console.log( '$lS Listeners :: Update: ', listener, merged);
-      $localStorage.listeners[listener.id] = merged;
     },
     delete: function(listenerId){
-      delete $localStorage.listeners[listenerId];
+      delete $localStorage.events;
+      $localStorage.events = [];
+      $rootScope.$broadcast('events-updated');
     }
-    */
+
   };
 })
 

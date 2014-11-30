@@ -6,6 +6,11 @@
       <ion-item ng-repeat="listener in listeners" type="item-text-wrap"  class="item-icon-left item-icon-right" href="#/main/tab/listeners/{{listener.id}}">
       <i class="icon {{listener.core.icon}} {{listener.core.color}}"></i>
         <h2>{{listener.core.name}} : {{listener.listenerName}}</h2>
+
+        <span class="badge badge-{{listener.enabled ? 'balanced' : 'dark'}}">
+          {{listener.enabled ? 'On' : 'Off'}}
+        </span>
+
         <i class="icon ion-chevron-right"></i>
       </ion-item>
 

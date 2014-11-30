@@ -26,7 +26,7 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
       'cores':      {},
       'sparkData':  {},
       'listeners':  {},
-      'events':     {},
+      'events':     [],
       'settings': {
         sparkApiUrl: "https://api.spark.io/v1/"
       }

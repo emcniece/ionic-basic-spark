@@ -9,6 +9,7 @@
   <ion-slide-box on-slide-changed="slideHasChanged($index)">
 	  <ion-slide>
 	    <div class="box bar bar-header bar-stable">
+
 	    	<div class="buttons">
 	    		<button class="button button-energized icon-left ion-flash" ng-click="openPopover($event)">
 	    			{{numLst}}
@@ -19,19 +20,28 @@
 	    			</ng-pluralize>
 	    		</button>
 	    	</div>
-	    	<div class="h3 title">All Core Events</div>
+	    	<div class="h3 title">All Events ({{events.length}})</div>
 
-	    	<ion-list>
-	    		<ion-item ng-repeat="event in events" class="item-icon-left">
-	          <a href="/#main/tab/listeners/{{listener.id}}">
-	            <i class="icon {{listener.core.icon}} {{listener.core.color}}"></i>
-	            {{listener.listenerName}}
-	            <span class="item-note">{{listener.core.name}}</span>
-	          </a>
-	        </ion-item>
-	    	</ion-list>
+        <div class="buttons">
+          <button class="button button-assertive" ng-click="deleteData()">Clear Events</button>
+        </div>
 
 	    </div>
+
+      <ion-content>
+        <div class="box-content">
+          <ion-list>
+            <ion-item ng-repeat="event in events" class="item-icon-left">
+              <a href="/#main/tab/listeners/{{listener.id}}">
+                <i class="icon {{event.core.icon}} {{event.core.color}}"></i>
+                {{event.listener.listenerName}} {{event.listener.id}}
+                <span class="item-note">{{listener.core.name}}</span>
+              </a>
+            </ion-item>
+          </ion-list>
+        </div>
+      </ion-content>
+
 	  </ion-slide>
 
 	  <ion-slide ng-repeat="core in cores">
@@ -47,8 +57,25 @@
 
 	    		</button>
 	    	</div>
-	    	<div class="h3 title">{{core.name}}</div>
+
+	    	<div class="h3 title">{{core.name}} ({{ (events|filter:core.id).length }})</div>
+
 	    </div>
+
+      <ion-content>
+        <div class="box-content">
+          <ion-list>
+            <ion-item ng-repeat="event in events | filter:core.id" class="item-icon-left">
+              <a href="/#main/tab/listeners/{{listener.id}}">
+                <i class="icon {{event.core.icon}} {{event.core.color}}"></i>
+                {{event.listener.listenerName}} {{event.listener.id}}
+                <span class="item-note">{{listener.core.name}}</span>
+              </a>
+            </ion-item>
+          </ion-list>
+        </div>
+      </ion-content>
+
 	  </ion-slide>
 
 	</ion-slide-box>

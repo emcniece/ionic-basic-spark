@@ -96,3 +96,23 @@ ion-list.has-scroller .item ion-scroll.item{
 ion-content.has-header.has-tabs{
 	top:49px;
 }
+
+.has-tabs, .bar-footer.has-tabs{
+	bottom:0;
+}
+.item.item-icon-left > .badge,
+.item.item-icon-left .item-content > .badge{
+	right:60px;
+}
+.box-content{
+	margin-top:38px;
+}
+.slider-pager{
+	bottom:0;
+	padding:10px 0 30px 0;
+	background:#ececec;
+	border-top:1px solid #acacac;
+}
+#home ion-item > a{
+	text-decoration: none;
+}

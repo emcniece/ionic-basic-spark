@@ -1,17 +1,27 @@
-<ion-view title="{{account.email}}" hide-nav-bar="true">
+<ion-view title="{{account.email}}" hide-nav-bar="true" ng-controller="ListenerDetailCtrl">
   <ion-header-bar><!-- kept as spacer --></ion-header-bar>
   <ion-content has-header="true" padding="false">
 
   	<div class="list">
   		<span class="item item-icon-left">
-  			<i class="icon ion-email"></i>
-  			{{listener}}
+  			<i class="icon ion-headphone"></i>
+  			Name <span class="item-note">{{listener.listenerName}}</span>
   		</span>
+
+      <ion-toggle class="item-icon-left" ng-model="listener.enabled" ng-checked="listener.enabled" ng-change="updateListener();">
+        <i class="icon ion-headphone"></i>
+        Enabled
+      </ion-toggle>
 
   		<span class="item item-icon-left">
   			<i class="icon ion-information"></i>
   			System ID <span class="item-note">{{listener.id}}</span>
   		</span>
+
+      <span class="item item-icon-left">
+        <i class="icon {{listener.core.color}} {{listener.core.icon}}"></i>
+        Core <span class="item-note">{{listener.core.name}}</span>
+      </span>
 
   		<a class="item item-icon-left item-icon-right" href="/#">
   			<i class="icon ion-key"></i>
@@ -33,4 +43,11 @@
   	</div>
 
   </ion-content>
+
+  <ion-footer-bar class="bar-stable">
+    <div class="buttons">
+      <button class="button icon-left ion-chevron-left" ng-click="goBack()">Back</button>
+    </div>
+  </ion-footer-bar>
+
 </ion-view>
