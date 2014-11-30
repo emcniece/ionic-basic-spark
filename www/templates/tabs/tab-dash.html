@@ -32,10 +32,10 @@
         <div class="box-content">
           <ion-list>
             <ion-item ng-repeat="event in events" class="item-icon-left">
-              <a href="/#main/tab/listeners/{{listener.id}}">
+              <a href="/#main/tab/events/{{event.id}}">
                 <i class="icon {{event.core.icon}} {{event.core.color}}"></i>
-                {{event.listener.listenerName}} {{event.listener.id}}
-                <span class="item-note">{{listener.core.name}}</span>
+                {{event.data}}
+                <span class="item-note">{{event.listener.listenerName}}</span>
               </a>
             </ion-item>
           </ion-list>
