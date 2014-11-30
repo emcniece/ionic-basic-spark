@@ -1,0 +1,18 @@
+<ion-popover-view>
+  <ion-header-bar class="bar bar-header bar-{{activeCore.color || 'energized'}}">
+    <h1 class="title">Active Listeners</h1>
+  </ion-header-bar>
+  <ion-content>
+    <ion-scroll direction="y" style="height:400px">
+      <ion-list>
+        <ion-item ng-repeat="listener in activeLsts" class="item-icon-left">
+          <a href="/#main/tab/listeners/{{listener.id}}">
+            <i class="icon {{listener.core.icon}} {{listener.core.color}}"></i>
+            {{listener.listenerName}}
+            <span class="item-note">{{listener.core.name}}</span>
+          </a>
+        </ion-item>
+      </ion-list>
+    </ion-scroll>
+  </ion-content>
+</ion-popover-view>

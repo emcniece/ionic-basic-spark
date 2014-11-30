@@ -93,3 +93,6 @@ ion-list.has-scroller .item{
 ion-list.has-scroller .item ion-scroll.item{
 	padding:16px;
 }
+ion-content.has-header.has-tabs{
+	top:49px;
+}

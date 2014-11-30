@@ -22,11 +22,11 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
 
     // Load default settings and variables
     $localStorage.$default({
-      'accounts': [],
-      'cores': {},
-      'sparkData': {},
-      'listeners': {},
-      'events': {},
+      'accounts':   [],
+      'cores':      {},
+      'sparkData':  {},
+      'listeners':  {},
+      'events':     {},
       'settings': {
         sparkApiUrl: "https://api.spark.io/v1/"
       }

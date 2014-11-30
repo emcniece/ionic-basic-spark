@@ -9,11 +9,26 @@ angular.module('starter.controllers', ['ngStorage'])
 
 })
 
-.controller('DashCtrl', function($localStorage, $scope, $ionicSideMenuDelegate, $ionicSlideBoxDelegate, Cores, Listeners) {
+.controller('DashCtrl', function($localStorage, $scope, $ionicSideMenuDelegate, $ionicSlideBoxDelegate, $ionicPopover, Cores, Listeners) {
 
 	$scope.cores = Cores.all();
+
   var totalList = 0;
-  angular.forEach(Listeners.all(), function(listener){
+  $scope.listeners = Listeners.all();
+  $scope.numLst = Object.size($scope.listeners);
+
+  // used for individual popups
+  $scope.activeCore = false;
+  $scope.activeLsts = $scope.listeners;
+
+  // Set up cores
+  angular.forEach($scope.cores, function(core){
+    core.listeners = Listeners.getByCore(core.id);
+    core.numLst = core.listeners.length;
+  });
+
+  // Set up listeners
+  angular.forEach($scope.listeners, function(listener){
     console.log(listener)
   });
 
@@ -22,6 +37,30 @@ angular.module('starter.controllers', ['ngStorage'])
     $ionicSlideBoxDelegate.next();
   };
 
+  $ionicPopover.fromTemplateUrl('templates/popovers/popover-dash-listener.html', {
+    scope: $scope,
+  }).then(function(popover) {
+    $scope.popover = popover;
+  });
+
+  $scope.openPopover = function($event, core){
+    if(typeof(core) !== 'undefined'){
+      $scope.activeCore = core;
+      $scope.activeLsts = $scope.activeCore.listeners;
+    }
+    else{
+      $scope.activecore = false;
+      $scope.activeLsts = $scope.listeners;
+    }
+
+    $scope.popover.show($event);
+  };
+  $scope.closePopover = function() {
+    $scope.popover.hide();
+  };
+  $scope.$on('$destroy', function() {
+    $scope.popover.remove();
+  });
 
 })
 

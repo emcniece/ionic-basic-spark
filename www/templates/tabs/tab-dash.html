@@ -9,14 +9,45 @@
   <ion-slide-box on-slide-changed="slideHasChanged($index)">
 	  <ion-slide>
 	    <div class="box bar bar-header bar-stable">
-			
+	    	<div class="buttons">
+	    		<button class="button button-energized icon-left ion-flash" ng-click="openPopover($event)">
+	    			{{numLst}}
+	    			<ng-pluralize count="numLst"
+	    				when="{'1':'Listener',
+	    					'other': 'Listeners'
+	    			}">
+	    			</ng-pluralize>
+	    		</button>
+	    	</div>
 	    	<div class="h3 title">All Core Events</div>
+
+	    	<ion-list>
+	    		<ion-item ng-repeat="event in events" class="item-icon-left">
+	          <a href="/#main/tab/listeners/{{listener.id}}">
+	            <i class="icon {{listener.core.icon}} {{listener.core.color}}"></i>
+	            {{listener.listenerName}}
+	            <span class="item-note">{{listener.core.name}}</span>
+	          </a>
+	        </ion-item>
+	    	</ion-list>
+
 	    </div>
 	  </ion-slide>
 
 	  <ion-slide ng-repeat="core in cores">
-	    <div class="box">
-	    	<div class="small-header">{{core.name}}</div>
+	    <div class="box bar bar-header bar-stable">
+	    	<div class="buttons">
+	    		<button class="button button-{{core.color}} icon-left {{core.icon}}" ng-click="openPopover($event, core)">
+	    			{{core.numLst}}
+	    			<ng-pluralize count="core.numLst"
+	    				when="{'1':'Listener',
+	    					'other': 'Listeners'
+	    			}">
+	    			</ng-pluralize>
+
+	    		</button>
+	    	</div>
+	    	<div class="h3 title">{{core.name}}</div>
 	    </div>
 	  </ion-slide>
 

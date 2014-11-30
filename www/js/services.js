@@ -152,7 +152,7 @@ angular.module('starter.services', [])
 =            Listeners Service            =
 =========================================*/
 
-.factory('Listeners', function($localStorage) {
+.factory('Listeners', function($localStorage, Cores) {
   return {
     all: function() {
       return $localStorage.listeners;
@@ -168,6 +168,28 @@ angular.module('starter.services', [])
 
       return get;
     },
+    getByCore: function(coreId){
+      var core = Cores.get(coreId),
+          lst = [];
+      angular.forEach($localStorage.listeners, function(listener){
+        if( coreId == listener.coreId){
+
+          // Only add specific details - core recursion blows out here
+          lst.push({
+            id: listener.id,
+            listenerName: listener.listenerName,
+            core: {
+              name: listener.core.name,
+              icon: listener.core.icon,
+              color: listener.core.color
+            }
+          });
+        } // if coreId matches
+
+      }); // getByCore
+
+      return lst;
+    },
     update: function(listener){
       var merged = merge(listener, $localStorage.listeners[listener.id]);
 
@@ -179,6 +201,60 @@ angular.module('starter.services', [])
     }
   };
 })
+
+/*======================================
+=            Events Service            =
+======================================*/
+.factory('Events', function($localStorage, Cores, Listeners) {
+  return {
+    all: function() {
+      return $localStorage.events;
+    },
+    add: function(event) {
+      console.log( '$lS Events :: Adding: ', event);
+      $localStorage.event[event.id] = event;
+      return event;
+    },
+    get: function(eventId){
+      var get = $localStorage.events[eventId] || false;
+      console.log( '$lS Events :: Get: ', eventId, get);
+
+      return get;
+    },
+    getByCore: function(coreId){
+      var core = Cores.get(coreId),
+          lst = [];
+      angular.forEach($localStorage.events, function(event){
+        if( coreId == event.coreId){
+
+          // Only add specific details - core recursion blows out here
+          lst.push(event);
+        } // if coreId matches
+
+      }); // getByCore
+
+      return lst;
+    }
+    /*
+    update: function(listener){
+      var merged = merge(listener, $localStorage.listeners[listener.id]);
+
+      console.log( '$lS Listeners :: Update: ', listener, merged);
+      $localStorage.listeners[listener.id] = merged;
+    },
+    delete: function(listenerId){
+      delete $localStorage.listeners[listenerId];
+    }
+    */
+  };
+})
+
+
+
+
+/*======================================
+=            Ionic Features            =
+======================================*/
 
 .service('IonFeats', function($localStorage){
   return {
