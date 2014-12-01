@@ -12,9 +12,14 @@
 		<div class="item range range-positive">
 			<span class="input-label"># Events Saved: {{settings.maxDataLength}}</span>
 		    <i class="icon ion-battery-low"></i>
-		    <input type="range" ng-model="settings.maxDataLength" ng-value="maxDataLength" name="maxDataLength" min="0" max="1000" value="100">
+		    <input type="range" ng-model="settings.maxDataLength" ng-value="maxDataLength" name="maxDataLength" min="0" max="200" value="100">
 		    <i class="icon ion-battery-half"></i>
 		</div>
+
+		<label class="item item-input item-stacked-label">
+			<span class="input-label">Date Format</span>
+			<input name="dateFormat" type="text" ng-model="settings.dateFormat" placeholder="M/d H:mm:ss" ng-value="sparkApiUrl" value="M/d H:mm:ss">
+		</label>
 
 	</div>
 

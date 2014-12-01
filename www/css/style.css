@@ -116,3 +116,13 @@ ion-content.has-header.has-tabs{
 #home ion-item > a{
 	text-decoration: none;
 }
+.bar-footer > .button-block{
+	margin:0;
+}
+
+/* Responsive sizes */
+@media (max-width: 767px) {
+
+}
+@media (max-width: 400px) {
+}

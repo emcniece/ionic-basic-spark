@@ -22,20 +22,18 @@
 	    	</div>
 	    	<div class="h3 title">All Events ({{events.length}})</div>
 
-        <div class="buttons">
-          <button class="button button-assertive" ng-click="deleteData()">Clear Events</button>
-        </div>
+
 
 	    </div>
 
       <ion-content>
         <div class="box-content">
           <ion-list>
-            <ion-item ng-repeat="event in events" class="item-icon-left">
+            <ion-item ng-repeat="event in events track by $index" class="item-icon-left">
               <a href="/#main/tab/events/{{event.id}}">
-                <i class="icon {{event.core.icon}} {{event.core.color}}"></i>
-                {{event.data}}
-                <span class="item-note">{{event.listener.listenerName}}</span>
+                <i class="icon {{cores[event.coreId].icon}} {{cores[event.coreId].color}}"></i>
+                {{listeners[event.listenerId].listenerName}}
+                <span class="item-note">{{event.event.timeStamp | date:dateFormat}}</span>
               </a>
             </ion-item>
           </ion-list>
@@ -65,11 +63,11 @@
       <ion-content>
         <div class="box-content">
           <ion-list>
-            <ion-item ng-repeat="event in events | filter:core.id" class="item-icon-left">
-              <a href="/#main/tab/listeners/{{listener.id}}">
-                <i class="icon {{event.core.icon}} {{event.core.color}}"></i>
-                {{event.listener.listenerName}} {{event.listener.id}}
-                <span class="item-note">{{listener.core.name}}</span>
+            <ion-item ng-repeat="event in events track by $index" class="item-icon-left">
+              <a href="/#main/tab/events/{{event.id}}">
+                <i class="icon {{cores[event.coreId].icon}} {{cores[event.coreId].color}}"></i>
+                {{listeners[event.listenerId].listenerName}}
+                <span class="item-note">{{event.event.timeStamp | date:dateFormat}}</span>
               </a>
             </ion-item>
           </ion-list>

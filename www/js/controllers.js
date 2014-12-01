@@ -3,20 +3,20 @@ angular.module('starter.controllers', ['ngStorage'])
 .controller('MainCtrl', function($localStorage, $scope, $ionicSideMenuDelegate, Listeners) {
 
   // Start up events
-  initListeners(true);
+  $scope.firstRun = true;
+  initListeners();
 
   $scope.$on('listeners-updated', function(){
     initListeners();
   });
 
-  function initListeners(firstRun){
+  function initListeners(){
     // Set up listeners
     $scope.listeners = Listeners.all();
 
     angular.forEach($scope.listeners, function(listener){
-      if(firstRun) listener.active = false;
 
-      if(listener.enabled && (firstRun || listener.active) ){
+      if(listener.enabled && ($scope.firstRun || !listener.active) ){
         Listeners.start(listener);
       }
     });
@@ -27,12 +27,16 @@ angular.module('starter.controllers', ['ngStorage'])
     $ionicSideMenuDelegate.toggleLeft();
   };
 
+  // This concludes the init run
+  $scope.firstRun = false;
+
 })
 
 .controller('DashCtrl', function($localStorage, $scope, $ionicSideMenuDelegate, $ionicSlideBoxDelegate, $ionicPopover, Cores, Listeners, Events) {
 
 	$scope.cores = Cores.all();
   $scope.events = Events.all();
+  $scope.dateFormat = $localStorage.settings.dateFormat;
 
   var totalList = 0;
   $scope.listeners = Listeners.all();
@@ -55,6 +59,11 @@ angular.module('starter.controllers', ['ngStorage'])
     $ionicSlideBoxDelegate.update();
   });
 
+  $scope.$on('listeners-updated', function(e, args){
+    $scope.listeners = Listeners.all();
+    $ionicSlideBoxDelegate.update();
+  });
+
 	$scope.nextSlide = function() {
 		console.log('nextSlide');
     $ionicSlideBoxDelegate.next();
@@ -69,7 +78,7 @@ angular.module('starter.controllers', ['ngStorage'])
   $scope.openPopover = function($event, core){
     if(typeof(core) !== 'undefined'){
       $scope.activeCore = core;
-      $scope.activeLsts = $scope.activeCore.listeners;
+      $scope.activeLsts = Listeners.getByCore($scope.activeCore.id);
     }
     else{
       $scope.activecore = false;
@@ -86,7 +95,18 @@ angular.module('starter.controllers', ['ngStorage'])
   });
 
   $scope.deleteData = function(){
-    Events.delete();
+    var lsts = $scope.activeLsts ? $scope.activeLsts : Listeners.all();
+    Events.delete(lsts);
+  }
+
+  $scope.disableAllEvents = function(){
+    var lsts = $scope.activeLsts ? $scope.activeLsts : Listeners.all();
+    Listeners.stop(lsts);
+  }
+
+  $scope.enableAllEvents = function(){
+    var lsts = $scope.activeLsts ? $scope.activeLsts : Listeners.all();
+    Listeners.start(lsts);
   }
 
 })
@@ -530,8 +550,9 @@ angular.module('starter.controllers', ['ngStorage'])
   $scope.updateListener = function(){
 
     if( $scope.listener.active){
-      $scope.listener.active = false;
-      $scope.listener.eventSource.close();
+      Listeners.stop($scope.listener);
+      //$scope.listener.active = false;
+      //$scope.listener.eventSource.close();
     } else{
       Listeners.start($scope.listener);
       $rootScope.$broadcast('listeners-updated');

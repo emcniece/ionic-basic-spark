@@ -27,8 +27,10 @@ angular.module('ionicBasicSpark', ['ionic', 'starter.controllers', 'starter.serv
       'sparkData':  {},
       'listeners':  {},
       'events':     [],
+      'lastactive': {},
       'settings': {
-        sparkApiUrl: "https://api.spark.io/v1/"
+        sparkApiUrl: "https://api.spark.io/v1/",
+        dateFormat: "M/d H:mm:ss"
       }
     });
 
