@@ -122,7 +122,9 @@ ion-content.has-header.has-tabs{
 
 /* Responsive sizes */
 @media (max-width: 767px) {
-
+	.tab-hide{
+		display: none !important;
+	}
 }
 @media (max-width: 400px) {
 }
